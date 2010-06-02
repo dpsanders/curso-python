@@ -1,0 +1,180 @@
+\chapter{Comenzando con Python}
+
+En este capítulo, empezaremos a explorar el lenguaje Python. Se darán las bases tanto de la sintáxis básica, como de las herramientas principales para escribir programas en el lenguaje. En todo el curso se hará énfasis en las aplicaciones al cómputo científico y a la enseñanza del mismo.
+
+La versión de Python que ocuparemos es la 2.6. La nueva versión 3 rompe la compatibilidad con los paquetes básicos para el cómputo científico por el momento.
+
+
+\section{El entorno \texttt{ipython}}
+
+El entorno principal que ocuparemos para trabajar de manera interactiva es \texttt{ipython}. Otro posible es \texttt{idle}.
+
+\texttt{ipython} está diseñado para maximar la productividad al utilizar Python.
+En particular, tiene ciertos comandos que no existen en otros interpretadores de Python.
+Uno muy útil es
+\begin{python}
+In [1]: logstart primero_log.py
+\end{python}
+Este comando graba todo lo que se teclea en la sesión actual en el archivo dado, aqui \inl{primero_log.py}.
+
+Otra función de suma utilidad en \texttt{ipython} es que la de completar palabras parciales con la tecla \inl{<TAB>}.
+Además, los comandos \inl{who} y \inl{whos} proveen información de las funciones nuevas agregadas en la sesión.
+
+La documentación para cualquier función o comando está disponible en \inl{ipython} al poner \inl{?}, por ejemplo
+\begin{python}
+who?
+\end{python}
+Para funciones, \inl{??} muestra el código fuente de la función, cuando está disponible.
+
+
+\section{Aritmética}
+Python se puede utilizar como una calculadora:
+\begin{python}
+3
+3 + 2
+3 * (-7.1 + 10**2)
+\end{python}
+Aquí, \inl{**} indica una potencia, como en Fortran, y las paréntesis alteran la prioridad en las operaciones.
+
+
+Es necesario\footnote{En Python 2.6; la situación cambia en Python 3.} tener cuidado al hacer manipulaciones con enteros:
+\begin{python}
+1 / 2
+3 / 2
+5 / 2
+\end{python}
+ya que el resultado se redondea al entero más cercano. Para evitar eso, basta un punto decimal:
+\begin{python}
+1 / 2.
+\end{python}
+
+
+Los números sin punto decimal se consideran enteros, y los con punto decimal flotantes (de doble precisión).
+Los enteros pueden ser \emph{arbitrariamente grandes}:
+\begin{python}
+2 ** 2 ** 2 ** 2 ** 2
+\end{python}
+
+
+
+Python cuenta con números complejos, utilizando la notación \inl{1j} para la raiz de $-1$:
+\begin{python}
+1 + 3j
+1j * 1j
+j    # da un error
+\end{python}
+`\inl{#}' indica un comentario que se extiende hasta el final de la línea.
+
+
+
+\section{Variables}
+Para llevar a cabo cálculos, necesitamos \defn{variables}. Las variables se declaran como debe de ser:
+\begin{python}
+a = 3
+b = 17.5
+c = 1 + 3j
+
+print a + b / c
+\end{python}
+Python reconece de manera \emph{automática} el tipo de la variable según su forma.
+El comando \inl{print} imprime su argumento de una manera bonita.
+
+Al reasignar una variable, se pierde la información de su valor interior, incluyendo el tipo:
+\begin{python}
+a = 3
+a = -5.5
+\end{python}
+
+
+\section{Bibliotecas matemáticas}
+Para llevar a cabo cálculos con funciones más avanzadas, es necesario \emph{importar} la biblioteca estándar de matemáticas:
+\begin{python}
+from math import *
+\end{python}
+Eso no es necesario al correr \texttt{ipython -pylab}, que invoca un modo específico de \texttt{ipython}\footnote{Yo encuentro conveniente declarar un nuevo comando \texttt{pylab} agregando la línea \\ \texttt{alias pylab='ipython -pylab'} en el archivo \texttt{.bashrc} en mi directorio HOME.}.
+Sin embargo, eso importa mucho más que la simple biblioteca de matemáticas.  Nótese que Python está escrito en C, así que la biblioteca \inl{math} provee acceso a las funciones matemáticas que están en la biblioteca estándar de C. Más adelante veremos como acceder a otras funciones, tales como funciones especiales.
+
+\ej >Cuál es la respuesta de la entrada \inl{sqrt(-1)}?
+
+\ej Intenta resolver la ecuación cuadrática $a x^2 + b x + c = 0$ para distintos valores de $a$, $b$ y $c$. 
+
+
+
+Para permitir operaciones con números complejos como posibles respuestas, se ocupa la biblioteca (\defn{módulo}) \inl{cmath}.
+Si hacemos
+\begin{python}
+from cmath import *
+\end{python}
+entonces se importan las funciones adecuadas:
+\begin{python}
+sqrt(-1)
+\end{python}
+Sin embargo, ya se ``perdieron'' las funciones anteriores. 
+
+Una solución es de importar la biblioteca de otra manera:
+\begin{python}
+import cmath
+\end{python}
+Ahora las funciones que se han importado de \inl{cmath} tienen nombres que empiezan por \inl{cmath.}:
+\begin{python}
+cmath.sqrt(-1)
+\end{python}
+\inl{ipython} ahora nos proporciona la lista de funciones adentro del módulo si hacemos \inl{cmath.<TAB>}.
+
+
+
+\section{Entrada por parte del usuario}
+Se puede pedir información del usuario con
+\begin{python}
+a = raw_input('Dame el valor de a: ')
+print "El cuadrado de a es ", a*a
+\end{python}
+Las cadenas en Python son cadenas de caracteres entre apóstrofes o comillas. 
+
+
+\section{Programitas de Python: scripts}
+Una vez que las secuencias de comandos se complican, es útil poder guardarlos en un programa, o \defn{script}.
+Eso consiste en un archivo de texto, cuyo nombre termina en \inl{.py}, donde se guarda la secuencia de comandos.
+
+Por ejemplo, guardemos el código anterior en el archivo \inl{cuad.py}
+Podemos correr el código desde \inl{ipython} con
+\begin{python}
+run cuad
+\end{python}
+Al terminar de correr el programa, el control regresa a \inl{ipython}, pero todavía tenemos acceso a las variables y funciones definidas en el script.
+
+Alternativamente, podemos tratar el script como un programa en sí al ejecutar desde el shell
+\begin{python}
+python cuad.py
+\end{python}
+Al terminar, el control regresa al shell, y perdemos la información adentro del script.
+
+De hecho, un script se puede considerar un módulo en sí, que también se puede importar:
+\begin{python}
+from cuad import *
+\end{python}
+
+
+
+
+
+\section{La biblioteca estándar}
+Python tiene una biblioteca estándar amplia, lo cual siempre está disponible en cualquier instalación de Python.
+La documentación para esta biblioteca está disponible en \url{http://docs.python.org/library/}
+
+Por ejemplo, la sección 9 incluye información sobre el módulo \inl{fractions}:
+\begin{python}
+from fractions import Fraction
+
+a = Fraction(3, 5)
+b = Fraction(1)
+c = a + b
+d = Fraction(4, 6)
+d
+e = a + d
+\end{python}
+
+Cada `cosa' en Python es un \defn{objeto}, que tiene propiedades y operaciones disponibles.
+\inl{Fraction} es un tipo de objeto (\defn{clase}); sus operaciones están disponibles en \inl{ipython} a través de
+\inl{Fraction.<TAB>}. Las que empiezan con \inl{__} son internos y deberían de ignorarse por el momento; las demás son accesibles al usuario.
+

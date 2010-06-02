@@ -1,0 +1,176 @@
+\documentclass[letterpaper,10pt]{book}
+
+\usepackage{mathptmx}
+\usepackage{color}
+
+\usepackage[utf8]{inputenc}
+
+\usepackage{courier}
+
+\usepackage{amsmath}
+
+\usepackage[spanish]{babel}
+
+% \usepackage{listings}
+
+\usepackage{hyperref}
+
+% \newcommand{\defn}[1]{{\color{red} \emph{#1}}}
+
+\usepackage[procnames]{listings}
+\usepackage{textcomp}
+\usepackage{setspace}
+\usepackage{amssymb}
+
+\definecolor{gray}{gray}{0.5}
+\definecolor{green}{rgb}{0,0.5,0}
+\definecolor{lightgreen}{rgb}{0,0.7,0}
+\definecolor{purple}{rgb}{0.5,0,0.5}
+\definecolor{darkred}{rgb}{0.5,0,0}
+\definecolor{orange}{rgb}{1,0.5,0}
+% \lstnewenvironment{python}[1][]{
+% \lstnewenvironment{python}[1][]{
+\lstset{
+language=python,
+basicstyle=\ttfamily\small\setstretch{1},
+stringstyle=\color{green},
+showstringspaces=false,
+alsoletter={1234567890},
+otherkeywords={\ , \}, \{},
+keywordstyle=\color{blue},
+emph={access,and,as,break,class,continue,def,del,elif,else,%
+except,exec,finally,for,from,global,if,import,in,is,%
+lambda,not,or,pass,print,raise,return,try,while,assert},
+emphstyle=\color{orange}\bfseries,
+emph={[2]self},
+emphstyle=[2]\color{gray},
+emph={[4]ArithmeticError,AssertionError,AttributeError,BaseException,%
+DeprecationWarning,EOFError,Ellipsis,EnvironmentError,Exception,%
+False,FloatingPointError,FutureWarning,GeneratorExit,IOError,%
+ImportError,ImportWarning,IndentationError,IndexError,KeyError,%
+KeyboardInterrupt,LookupError,MemoryError,NameError,None,%
+NotImplemented,NotImplementedError,OSError,OverflowError,%
+PendingDeprecationWarning,ReferenceError,RuntimeError,RuntimeWarning,%
+StandardError,StopIteration,SyntaxError,SyntaxWarning,SystemError,%
+SystemExit,TabError,True,TypeError,UnboundLocalError,UnicodeDecodeError,%
+UnicodeEncodeError,UnicodeError,UnicodeTranslateError,UnicodeWarning,%
+UserWarning,ValueError,Warning,ZeroDivisionError,abs,all,any,apply,%
+basestring,bool,buffer,callable,chr,classmethod,cmp,coerce,compile,%
+complex,copyright,credits,delattr,dict,dir,divmod,enumerate,eval,%
+execfile,exit,file,filter,float,frozenset,getattr,globals,hasattr,%
+hash,help,hex,id,input,int,intern,isinstance,issubclass,iter,len,%
+license,list,locals,long,map,max,min,object,oct,open,ord,pow,property,%
+quit,range,raw_input,reduce,reload,repr,reversed,round,set,setattr,%
+slice,sorted,staticmethod,str,sum,super,tuple,type,unichr,unicode,%
+vars,xrange,zip},
+emphstyle=[4]\color{purple}\bfseries,
+upquote=true,
+morecomment=[s][\color{lightgreen}]{"""}{"""},
+commentstyle=\color{red}\slshape,
+literate={>>>}{\textbf{\textcolor{darkred}{>{>}>}}}3%
+         {...}{{\textcolor{gray}{...}}}3,
+procnamekeys={def,class},
+procnamestyle=\color{blue}\textbf,
+% framexleftmargin=1mm, framextopmargin=1mm, frame=shadowbox,
+ frame=none,
+rulesepcolor=\color{blue},
+% }}{}
+}
+\lstnewenvironment{python}[1][]{
+\lstset{
+language=python,
+basicstyle=\ttfamily\small\setstretch{1},
+stringstyle=\color{green},
+showstringspaces=false,
+alsoletter={1234567890},
+otherkeywords={\ , \}, \{},
+keywordstyle=\color{blue},
+emph={access,and,as,break,class,continue,def,del,elif,else,%
+except,exec,finally,for,from,global,if,import,in,is,%
+lambda,not,or,pass,print,raise,return,try,while,assert},
+emphstyle=\color{orange}\bfseries,
+emph={[2]self},
+emphstyle=[2]\color{gray},
+emph={[4]ArithmeticError,AssertionError,AttributeError,BaseException,%
+DeprecationWarning,EOFError,Ellipsis,EnvironmentError,Exception,%
+False,FloatingPointError,FutureWarning,GeneratorExit,IOError,%
+ImportError,ImportWarning,IndentationError,IndexError,KeyError,%
+KeyboardInterrupt,LookupError,MemoryError,NameError,None,%
+NotImplemented,NotImplementedError,OSError,OverflowError,%
+PendingDeprecationWarning,ReferenceError,RuntimeError,RuntimeWarning,%
+StandardError,StopIteration,SyntaxError,SyntaxWarning,SystemError,%
+SystemExit,TabError,True,TypeError,UnboundLocalError,UnicodeDecodeError,%
+UnicodeEncodeError,UnicodeError,UnicodeTranslateError,UnicodeWarning,%
+UserWarning,ValueError,Warning,ZeroDivisionError,abs,all,any,apply,%
+basestring,bool,buffer,callable,chr,classmethod,cmp,coerce,compile,%
+complex,copyright,credits,delattr,dict,dir,divmod,enumerate,eval,%
+execfile,exit,file,filter,float,frozenset,getattr,globals,hasattr,%
+hash,help,hex,id,input,int,intern,isinstance,issubclass,iter,len,%
+license,list,locals,long,map,max,min,object,oct,open,ord,pow,property,%
+quit,range,raw_input,reduce,reload,repr,reversed,round,set,setattr,%
+slice,sorted,staticmethod,str,sum,super,tuple,type,unichr,unicode,%
+vars,xrange,zip},
+emphstyle=[4]\color{purple}\bfseries,
+upquote=true,
+morecomment=[s][\color{lightgreen}]{"""}{"""},
+commentstyle=\color{red}\slshape,
+literate={>>>}{\textbf{\textcolor{darkred}{>{>}>}}}3%
+         {...}{{\textcolor{gray}{...}}}3,
+procnamekeys={def,class},
+procnamestyle=\color{blue}\textbf,
+% framexleftmargin=1mm, framextopmargin=1mm, frame=shadowbox,
+frame=none,
+rulesepcolor=\color{blue},#1
+}}{}
+
+
+\usepackage[medium, bf, compact]{titlesec}
+
+
+% \lstset{% general command to set parameter(s)
+% basicstyle=\small\ttfamily, % print whole listing small
+% keywordstyle=\color{black}\bfseries,
+% % underlined bold black keywords
+% identifierstyle=, % nothing happens
+% commentstyle=, % white comments
+% stringstyle=, % typewriter type for strings
+% showstringspaces=false} % no special string spaces
+
+\newcommand{\cmd}[1]{{\color{blue}\texttt{gnuplot}}}
+
+\newcommand{\x}{\mathbf{x}}
+
+\newcommand{\mean}[1]{\left \langle #1 \right \rangle}
+\newcommand{\defeq}{:=}
+
+\setlength{\parskip}{5pt}
+\setlength{\parindent}{0pt}
+
+\title{Notas del curso \\
+\textbf{ {\huge Programación en Python} }\\[20pt]
+Curso de actualización docente\\ Facultad de Ciencias
+}
+\author{\Large David P.~Sanders}
+\date{\large \today}
+
+\newcommand{\ej}{\noindent \textbf{Ejercicio:\ }}
+
+\newcommand{\defn}[1]{{\color{red} \emph{#1}}}
+
+\let\inl\lstinline
+
+\begin{document}
+
+\pagenumbering{roman}
+
+\maketitle
+% \tableofcontents
+
+\pagenumbering{arabic}
+
+\include{introduccion}
+\include{comenzando}
+\include{estructuras-de-control}
+
+
+\end{document}
