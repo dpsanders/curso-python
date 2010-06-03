@@ -15,7 +15,7 @@ Uno muy útil es
 \begin{python}
 In [1]: logstart primero_log.py
 \end{python}
-Este comando graba todo lo que se teclea en la sesión actual en el archivo dado, aqui \inl{primero_log.py}.
+Este comando graba un ``log'' (bitácora) de  todo lo que se teclea en la sesión actual en el archivo dado, aqui \inl{primero_log.py}.
 
 Otra función de suma utilidad en \texttt{ipython} es que la de completar palabras parciales con la tecla \inl{<TAB>}.
 Además, los comandos \inl{who} y \inl{whos} proveen información de las funciones nuevas agregadas en la sesión.
@@ -86,43 +86,6 @@ a = -5.5
 \end{python}
 
 
-\section{Bibliotecas matemáticas}
-Para llevar a cabo cálculos con funciones más avanzadas, es necesario \emph{importar} la biblioteca estándar de matemáticas:
-\begin{python}
-from math import *
-\end{python}
-Eso no es necesario al correr \texttt{ipython -pylab}, que invoca un modo específico de \texttt{ipython}\footnote{Yo encuentro conveniente declarar un nuevo comando \texttt{pylab} agregando la línea \\ \texttt{alias pylab='ipython -pylab'} en el archivo \texttt{.bashrc} en mi directorio HOME.}.
-Sin embargo, eso importa mucho más que la simple biblioteca de matemáticas.  Nótese que Python está escrito en C, así que la biblioteca \inl{math} provee acceso a las funciones matemáticas que están en la biblioteca estándar de C. Más adelante veremos como acceder a otras funciones, tales como funciones especiales.
-
-\ej >Cuál es la respuesta de la entrada \inl{sqrt(-1)}?
-
-\ej Intenta resolver la ecuación cuadrática $a x^2 + b x + c = 0$ para distintos valores de $a$, $b$ y $c$. 
-
-
-
-Para permitir operaciones con números complejos como posibles respuestas, se ocupa la biblioteca (\defn{módulo}) \inl{cmath}.
-Si hacemos
-\begin{python}
-from cmath import *
-\end{python}
-entonces se importan las funciones adecuadas:
-\begin{python}
-sqrt(-1)
-\end{python}
-Sin embargo, ya se ``perdieron'' las funciones anteriores. 
-
-Una solución es de importar la biblioteca de otra manera:
-\begin{python}
-import cmath
-\end{python}
-Ahora las funciones que se han importado de \inl{cmath} tienen nombres que empiezan por \inl{cmath.}:
-\begin{python}
-cmath.sqrt(-1)
-\end{python}
-\inl{ipython} ahora nos proporciona la lista de funciones adentro del módulo si hacemos \inl{cmath.<TAB>}.
-
-
-
 \section{Entrada por parte del usuario}
 Se puede pedir información del usuario con
 \begin{python}
@@ -158,6 +121,70 @@ from cuad import *
 
 
 
+\section{Listas}
+La estructura de datos principal en Python es la \defn{lista}. Consiste literalmente en una lista ordenada de cosas, y reemplaza a los arreglos en otros lenguajes. La diferencia es que las listas en Python son automáticamente de longitud \emph{variable}, y pueden contener objetos de \emph{cualquier} tipo.
+
+Una lista se define con corchetes (\inl{[} y \inl{\}):
+\begin{python}
+l = [3, 4, 6]
+\end{python}
+Puede contener cualquier cosa, <incluyendo a otras listas!:
+\begin{python}
+l = [3.5, -1, "hola", [1.0, [3, 17]]]
+\end{python}
+Por lo tanto, es una estructura de datos muy sencillo.
+
+Los elementos de la lista se pueden extraer y cambiar usando la notación \inl{l[i]},
+donde \inl{i} indica el número del elemento, empezando desde $0$:
+\begin{python}
+l = [1, 2, 3]
+print l[0], l[1]
+l[0] = 5
+l
+\end{python}
+
+Se pueden manipular rebanadas (``slices'') de la lista con la notación \inl{l[1:3]}:
+\begin{python}
+l = [1, 2, 3, 6, 7]
+l[1:3]
+l[:3]
+l[3:]
+\end{python}
+
+\ej >Qué hace \inl{l[-1]}?
+
+La longitud de una lista se puede encontrar con
+\begin{python}
+len(l)
+\end{python}
+Se pueden agregar elementos a la lista con
+\begin{python}
+l = []	  # lista vacia
+l.append(17)
+l.append(3)
+print l, len(l)
+\end{python}
+
+Como siempre, las otras operaciones que se pueden llevar a cabo con la lista se pueden
+averiguar en \inl{ipython} con \inl{l.<TAB>}.
+
+\section{$n$-adas / tuples}
+Otra estructura parecida es una $n$-ada (``tuple'').
+Es parecido a una lista, pero se escribe con (o incluso, a veces, sin paréntesis), y no se puede modificar:
+\begin{python}
+t = (3, 5)
+t[0]
+t[0] = 1	# error!
+\end{python}
+
+Las $n$-adas se utilizan para agrupar información. Se pueden asignar como sigue:
+\begin{python}
+a, b = 3, 5
+print a; print b
+\end{python}
+
+
+
 \section{La biblioteca estándar}
 Python tiene una biblioteca estándar amplia, lo cual siempre está disponible en cualquier instalación de Python.
 La documentación para esta biblioteca está disponible en \url{http://docs.python.org/library/}
@@ -177,4 +204,9 @@ e = a + d
 Cada `cosa' en Python es un \defn{objeto}, que tiene propiedades y operaciones disponibles.
 \inl{Fraction} es un tipo de objeto (\defn{clase}); sus operaciones están disponibles en \inl{ipython} a través de
 \inl{Fraction.<TAB>}. Las que empiezan con \inl{__} son internos y deberían de ignorarse por el momento; las demás son accesibles al usuario.
+
+
+
+
+
 

@@ -1,10 +1,182 @@
 \chapter{Estructuras de control}
 
-\section{Condicionales}
+Por estructuras de control, se entiende los comandos tales como condicionales, bucles, y funciones, que cambian el orden de ejecución de un programa.  
 
-\section{Listas}
+Las estructuras de control tienen un formato en común. A diferencia de C++ y Fortran, no existen instrucciones que indiquen donde empieza y termina un bloque del programa: en Python, un bloque empieza por \inl{:}, y su extensión se indica por el uso de una cantidad definida de \defn{espacio en blanco} al principio de cada línea. Un buen editor de texto te permite hacer eso de manera automática.
+
+\section{Condicionales}
+Para checar una condición y ejecutar código dependiente del resultado, se ocupa \inl{if}:
+\begin{python}
+a = raw_input('Dame el valor de a')
+if a > 0:
+  print "a es positiva"
+  a = a + 1
+elif a == 0:		# NB: dos veces =
+  print "a es 0"
+else:
+  print "a es negativa"
+\end{python}
+En el primer caso, hay dos comandos en el bloque que se ejecutará en el caso de que $a > 0$.
+Nótese que \inl{elif} es una abreviación de \inl{else: if}
+
+Las condiciones que se pueden ocupar incluyen: \inl{<}, \inl{<=} y \inl {!=} (no es igual).
+Para combinar condiciones se ocupan las palabras \inl{and} y \inl{or}:
+\begin{python}
+a = 3; b=7
+if a>1 and b>2:
+  print "Grandes"
+if a>0 or b>0:
+  print "Al menos uno positivo"
+\end{python}
+
 
 \section{Bucles}
+La parte central de muchos cálculos científicos consiste en llevar a cabo bucles, aunque en Python, como veremos, eso se desenfatiza.
+
+\subsection{\inl{while}}
+El tipo de bucle más sencillo es un \inl{while}, que ejecuta un bloque de código \defn{mientras} una cierta condición se satisfaga, y suele ocuparse para llevar a cabo una iteración en la cual no se conoce de antemano el número de iteraciones necesario. 
+
+El ejemplo más sencillo de un \inl{while}, donde sí se conoce la condición terminal, para contar hasta 9, se puede hacer como sigue:
+\begin{python}
+i = 0
+while i < 10:
+  i += 1	# equivalente a i = i + 1
+  print i
+\end{python}
+Nótese que si la condición deseada es del tipo ``hasta\ldots'', entonces se tiene que utilizar un \inl{while} con la condición opuesta. 
+
+\ej Encuentra los números de Fibonacci menores que 1000.
+
+\ej Implementa el llamado método babilónico para calcular la raiz cuadrada de un número dado $y$. Este método consiste en la iteración 
+$x_{n+1} = \frac{1}{2} \left[x_n + (y / x_n) \right]$. >Qué tan rápido converge?
+
+
+
+\subsection{\inl{for}}
+Un bucle de tipo \inl{for} se suele ocupar para llevar a cabo un número de iteraciones que se conoce de antemano.
+En el bucle de tipo \inl{for}, encontramos una diferencia importante con respecto a lenguajes más tradicionales: podemos iterar sobre \emph{cualquier} lista y ejecutar un bloque de código \defn{para} cada elemento de la lista:
+\begin{python}
+l = [1, 2.5, -3.71, "hola", [2, 3]]
+for i in l:
+  print 2*l
+\end{python}
+
+Si queremos iterar sobre muchos elementos, es más útil construir la lista. Por ejemplo, para hacer una iteración para todos los números hasta 100, podemos utilizar
+\begin{python}
+for i in range(100):
+  print 2*i
+\end{python}
+>Qué es lo que hace la función \inl{range}? Para averiguarlo, lo investigamos de manera interactiva con \inl{ipython}:
+\begin{python}
+range(10)
+range(3, 10, 2)
+\end{python}
+Nótese que \inl{range} no acepta argumentos de punto flotante.
+
+\ej Toma una lista, y crea una nueva que contiene la duplicación de cada elemento de la lista anterior.
+
+% \subsection{Cómo evitar bucles}
+% Los bucles en Python suelen ser lentos, por ser un lenguaje interpretado. En ciertas circum
 
 \section{Funciones}
-Docstrings
+Las funciones se pueden considerar como subprogramas que ejecutan una tarea dada. Corresponden a las subrutinas en Fortran. En Python, las funciones pueden o no aceptar argumentos, y pueden o no regresar resultados.
+
+La sintaxis para declarar una función es como sigue:
+\begin{python}
+def f(x):
+  print "Argumento x = ", x
+  return x*x
+\end{python}
+y se llama así:
+\begin{python}
+f(3)
+f(3.5)
+\end{python}
+
+Las funciones se pueden utilizar con argumentos de \emph{cualquier} tipo --el tipo de los argumentos nunca se especifica. Si las operaciones llevadas a cabo no se permiten para el tipo que se provee, entonces Python regresa un error:
+\begin{python}
+f("hola")
+\end{python}
+
+Las funciones pueden regresar varios resultados al juntarlos en un tuple:
+\begin{python}
+def f(x, y):
+  return 2*x, 3*y
+\end{python}
+
+Se puede proporcionar una forma sencilla de documentación de una función al proporcionar un ``docstring":
+\begin{python}
+def cuad(x):
+  """Funcion para llevar un numero al cuadrado.
+  Funciona siempre y cuando el tipo de x permite multiplicacion.
+  """
+  return x*x
+\end{python}
+Ahora si interrogamos al objeto cuad con \inl{ipython}:
+\begin{python}
+cuad?
+\end{python}
+nos da esta información. Si la función está definida en un archivo, entonces
+\inl{cuad??} muestra el código de la definición de la función.
+
+\ej Pon el código para calcular la raiz cuadrada de un número adentro de una función. Calcula la raíz de los números de 0 hasta 10 en pasos de 0.2 e imprimir los resultados.
+
+\section{Redirección de la salida}
+En Linux, la manera más fácil (pero no muy flexible) de guardar datos en un archivo es utilizando la llamada ``redirección'' que provee el shell (Bash). Al correr un programa así desde Bash:
+\begin{verbatim}
+./programa > salida.dat
+\end{verbatim}
+la salida estándar (lo que aparece en la pantalla al correr el programa) se manda al archivo especificado. 
+Así que
+\begin{python}
+python prog.py > salida.dat
+\end{python}
+mandará la salida del programa de python \inl{prog.py} al archivo \inl{salida.dat}.
+
+\ej Guarda los resultados de las raices cuadradas, y grafícalos con \inl{gnuplot}:
+\texttt{plot "salida.dat"}
+
+
+
+
+
+\section{Bibliotecas matemáticas}
+Para llevar a cabo cálculos con funciones más avanzadas, es necesario \emph{importar} la biblioteca estándar de matemáticas:
+\begin{python}
+from math import *
+\end{python}
+Eso no es necesario al correr \texttt{ipython -pylab}, que invoca un modo específico de \texttt{ipython}\footnote{Yo encuentro conveniente declarar un nuevo comando \texttt{pylab} agregando la línea \\ \texttt{alias pylab='ipython -pylab'} en el archivo \texttt{.bashrc} en mi directorio HOME.}.
+Sin embargo, eso importa mucho más que la simple biblioteca de matemáticas.  Nótese que Python está escrito en C, así que la biblioteca \inl{math} provee acceso a las funciones matemáticas que están en la biblioteca estándar de C. Más adelante veremos como acceder a otras funciones, tales como funciones especiales.
+
+\ej >Cuál es la respuesta de la entrada \inl{sqrt(-1)}?
+
+\ej Intenta resolver la ecuación cuadrática $a x^2 + b x + c = 0$ para distintos valores de $a$, $b$ y $c$. 
+
+
+
+Para permitir operaciones con números complejos como posibles respuestas, se ocupa la biblioteca (\defn{módulo}) \inl{cmath}.
+Si hacemos
+\begin{python}
+from cmath import *
+\end{python}
+entonces se importan las funciones adecuadas:
+\begin{python}
+sqrt(-1)
+\end{python}
+Sin embargo, ya se ``perdieron'' las funciones anteriores, es decir, las nuevas funciones han reemplazado a las distintas funciones con los mismos nombres que había antes.
+
+Una solución es importar la biblioteca de otra manera:
+\begin{python}
+import cmath
+\end{python}
+Ahora las funciones que se han importado de \inl{cmath} tienen nombres que empiezan por \inl{cmath.}:
+\begin{python}
+cmath.sqrt(-1)
+\end{python}
+\inl{ipython} ahora nos proporciona la lista de funciones adentro del módulo si hacemos \inl{cmath.<TAB>}.
+
+
+
+
+
+
