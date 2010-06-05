@@ -1,0 +1,48 @@
+\chapter{Operaciones matemáticas y la biblioteca de arreglos \texttt{numpy}}
+
+\section{Conversión de números}
+Acordémonos que hay distintos tipos de números en Python, principalmente enteros (\inl{int}) y flotantes (\inl{float}).
+Para convertir entre diferentes tipos, incluyendo cadenas, podemos utilizar
+\begin{python}
+a = float(3)
+b = float('3.5')
+\end{python}
+
+
+\section{Aritmética con precisión arbitraria}
+
+A veces, es necesaria poder llevar a cabo operaciones aritméticas con números flotantes (reales) con precisión superior a los 16 dígitos que provee el \inl{float} (número de ``doble precisión'') de Python. Para hacerlo, existen varios proyectos que proveen bibliotecas con este fin.
+La mayoría de estas bibliotecas son interfaces a otros proyectos escritos en C++.
+
+Aquí veremos una opción, la biblioteca \inl{mpmath}, que está escrito completamente en Python. En principio eso lo hace más lento, pero más fácil de entender y modificar el código.
+
+Para cargar la biblioteca, hacemos
+\begin{python}
+from mpmath import *
+\end{python}
+Para cambiar la precisión, hacemos
+\begin{python}
+mp.dps = 50
+\end{python}
+Ahora, para crear un número flotante de esta precisión, hacemos
+\begin{python}
+x = mpf('1.0')
+\end{python}
+donde el número se expresa como cadena.
+
+Al hacer manipulaciones con \inl{x}, los cálculos se llevan a cabo en precisión múltiple.
+Por ejemplo,
+\begin{python}
+print x/6., x*10
+print mpf('2.0')**2**2**2**2
+\end{python}
+Con \inl{mpmath}, no hay límite del exponente que se puede manejar.
+También están definidas muchas funciones, por ejemplo \inl{sin}, \inl{exp} y \inl{log}.
+
+Para imprimir un número con una precisión dada, usamos
+\begin{python}
+nprint(x, 20)
+\end{python}
+
+
+

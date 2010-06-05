@@ -95,28 +95,6 @@ print "El cuadrado de a es ", a*a
 Las cadenas en Python son cadenas de caracteres entre apóstrofes o comillas. 
 
 
-\section{Programitas de Python: scripts}
-Una vez que las secuencias de comandos se complican, es útil poder guardarlos en un programa, o \defn{script}.
-Eso consiste en un archivo de texto, cuyo nombre termina en \inl{.py}, donde se guarda la secuencia de comandos.
-
-Por ejemplo, guardemos el código anterior en el archivo \inl{cuad.py}
-Podemos correr el código desde \inl{ipython} con
-\begin{python}
-run cuad
-\end{python}
-Al terminar de correr el programa, el control regresa a \inl{ipython}, pero todavía tenemos acceso a las variables y funciones definidas en el script.
-
-Alternativamente, podemos tratar el script como un programa en sí al ejecutar desde el shell
-\begin{python}
-python cuad.py
-\end{python}
-Al terminar, el control regresa al shell, y perdemos la información adentro del script.
-
-De hecho, un script se puede considerar un módulo en sí, que también se puede importar:
-\begin{python}
-from cuad import *
-\end{python}
-
 
 
 
@@ -207,6 +185,27 @@ Cada `cosa' en Python es un \defn{objeto}, que tiene propiedades y operaciones d
 
 
 
+\section{Programitas de Python: scripts}
+Una vez que las secuencias de comandos se complican, es útil poder guardarlos en un programa, o \defn{script}.
+Eso consiste en un archivo de texto, cuyo nombre termina en \inl{.py}, donde se guarda la secuencia de comandos.
+
+Por ejemplo, guardemos el código anterior en el archivo \inl{cuad.py}
+Podemos correr el código desde \inl{ipython} con
+\begin{python}
+run cuad
+\end{python}
+Al terminar de correr el programa, el control regresa a \inl{ipython}, pero todavía tenemos acceso a las variables y funciones definidas en el script.
+
+Alternativamente, podemos tratar el script como un programa en sí al ejecutar desde el shell
+\begin{python}
+python cuad.py
+\end{python}
+Al terminar, el control regresa al shell, y perdemos la información adentro del script.
+
+De hecho, un script se puede considerar un módulo en sí, que también se puede importar:
+\begin{python}
+from cuad import *
+\end{python}
 
 
 

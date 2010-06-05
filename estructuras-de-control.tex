@@ -47,7 +47,7 @@ Nótese que si la condición deseada es del tipo ``hasta\ldots'', entonces se ti
 
 \ej Encuentra los números de Fibonacci menores que 1000.
 
-\ej Implementa el llamado método babilónico para calcular la raiz cuadrada de un número dado $y$. Este método consiste en la iteración 
+\ej Implementa el llamado método babilónico para calcular la raíz cuadrada de un número dado $y$. Este método consiste en la iteración 
 $x_{n+1} = \frac{1}{2} \left[x_n + (y / x_n) \right]$. >Qué tan rápido converge?
 
 
@@ -119,22 +119,7 @@ cuad?
 nos da esta información. Si la función está definida en un archivo, entonces
 \inl{cuad??} muestra el código de la definición de la función.
 
-\ej Pon el código para calcular la raiz cuadrada de un número adentro de una función. Calcula la raíz de los números de 0 hasta 10 en pasos de 0.2 e imprimir los resultados.
-
-\section{Redirección de la salida}
-En Linux, la manera más fácil (pero no muy flexible) de guardar datos en un archivo es utilizando la llamada ``redirección'' que provee el shell (Bash). Al correr un programa así desde Bash:
-\begin{verbatim}
-./programa > salida.dat
-\end{verbatim}
-la salida estándar (lo que aparece en la pantalla al correr el programa) se manda al archivo especificado. 
-Así que
-\begin{python}
-python prog.py > salida.dat
-\end{python}
-mandará la salida del programa de python \inl{prog.py} al archivo \inl{salida.dat}.
-
-\ej Guarda los resultados de las raices cuadradas, y grafícalos con \inl{gnuplot}:
-\texttt{plot "salida.dat"}
+\ej Pon el código para calcular la raíz cuadrada de un número adentro de una función. Calcula la raíz de los números de 0 hasta 10 en pasos de 0.2 e imprimir los resultados.
 
 
 

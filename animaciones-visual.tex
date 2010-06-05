@@ -1,0 +1,61 @@
+\chapter{Animaciones sencillas con Visual Python}
+
+En este capítulo, veremos un paquete, Visual Python, que permite hacer animaciones en 3 dimensiones, en tiempo real, de una manera sencillísima. <Casi vale la pena aprender Python solamente para eso! Y evidentemente es excelente para enseñar conceptos básicos de la física. De hecho, fue diseñado principalmente para este fin.
+
+\section{El paquete Visual Python}
+La biblioteca de Visual Python (de aquí en adelante, ``Visual'') se carga con
+\begin{python}
+from visual import *
+\end{python}
+La manera más fácil de entender cómo utilizarlo es por ejemplo.
+
+Empecemos creando una esfera:
+\begin{python}
+s = sphere()
+\end{python}
+Podemos ver \inl{sphere()} como una función que llamamos para crear un objeto tipo esfera.
+Para poder manipular este objeto después, se lo asignamos el nombre \inl{s}.
+
+Al crear objetos en Visual Python, \defn{se despliegan por automático}, y <en 3 dimensiones!
+Como se puede imaginar, hay una cantidad feroz de trabajo abajo que permite que funcione eso, pero afortunadamente no tenemos que preocuparnos por eso, y simplemente podemos aprovechar su existencia.
+
+>Qué podemos hacer con la esfera \inl{s}? Como siempre, \inl{ipython} nos permite averiguarlo al poner \inl{s.<TAB>}.
+Básicamente, podemos cambiar sus \defn{propiedades internas}, tales como su color, su radio y su posición:
+\begin{python}
+s.color = color.red	# o  s.color = 1, 0, 0
+s.radius = 0.5
+s.pos = 1, 0, 0
+\end{python}
+Aquí, \inl{s.pos} es un vector, también definido por Visual, como podemos ver al teclear \inl{type(s.pos)}.
+Los vectores en Visual son diferentes de los que provee \inl{numpy}. Los de Visual siempre tienen 3 componentes.
+
+Ahora podemos construir otros objetos, incluyendo a \inl{box}, \inl{cylinder}, etc.
+Nótese que la gráfica se puede rotar en 3 dimensiones con el ratón, al arrastar con el botón de derecho puesto, y se puede hacer un acercamiento con el botón central.
+
+\section{Animaciones}
+Ahora llega lo bueno. >Cómo podemos hacer una animación? Una animación no es más que una secuencia de imágenes, desplegadas rápidamente una tras otra. Así que eso es lo que tenemos que hacer:
+\begin{python}
+s = sphere()
+b = box()
+for i in range(10000):
+  rate(100)
+  s.pos = i/1000., 0, 0
+\end{python}
+
+\section{Agregando propiedades a objetos}
+Supongamos que queremos pensar en nuestra esfera como una pelota. Entonces la pelota tendrá no solamente una posición, sino también una velocidad.  Se lo podemos crear así:
+\begin{python}
+pelota = sphere()
+pelota.vel = vector(1,0,0)
+\end{python}
+Nótese que se tiene que poner explícitamente \inl{vector}, ya que sino sería una $n$-ada (tupla).
+Ahora quedó definida la velocidad de la pelota como otra propiedad interna.
+
+
+Eso es básicamente todo lo que hay que saber de Visual Python. También es posible interactuar con el teclado, extraer las coordenadas del ratón, etc.
+
+
+
+
+
+

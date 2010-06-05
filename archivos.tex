@@ -1,0 +1,123 @@
+\chapter{Cómo leer y escribir archivos}
+Uno de los usos principales de Python para el cómputo científico es el de procesar datos generados en otro lado.
+Por lo tanto, es necesario saber cómo importar y exportar archivos.
+
+
+
+
+\section{Redirección de la salida}
+En Linux, la manera más fácil (pero no muy flexible) de guardar datos en un archivo es utilizando la llamada ``redirección'' que provee el shell (Bash). Al correr un programa así desde Bash:
+\begin{verbatim}
+./programa > salida.dat
+\end{verbatim}
+la salida estándar (lo que aparece en la pantalla al correr el programa) se manda al archivo especificado. 
+Así que
+\begin{python}
+python prog.py > salida.dat
+\end{python}
+mandará la salida del programa de python \inl{prog.py} al archivo \inl{salida.dat}.
+
+\ej Guarda los resultados de las raices cuadradas de diferentes números, y grafícalos con \inl{gnuplot}:
+\texttt{plot "salida.dat"}
+
+\ej Haz una gráfica de la velocidad de convergencia del método Babilónico para calcular la raíz cuadrada.
+
+\section{Leer archivos}
+Para leer un archivo, primero es necesario abrirlo para leerse. Supongamos que tenemos un archivo llamado \inl{datos.dat}, entonces lo podemos abrir para su lectura con
+\begin{python}
+entrada = open("datos.dat", "r")
+\end{python}
+El segundo argumento, \inl{"r"}, es para indicar que se va a leer  (``read'') el archivo.
+El objeto \inl{entrada} ahora representa el archivo.
+
+Para leer del archivo abierto, hay varias posibilidades. Podemos leer todo de un golpe con \inl{entrada.read()}, leer todo por líneas con \inl{entrada.readlines()}, o línea por línea con \inl{entrada.readline()}. [Nótese que lo que se ha leído ya no se puede leer de nuevo sin cerrar el archivo con \inl{entrada.close()} y volverlo a abrir.]
+
+Por ejemplo, podemos utilizar
+\begin{python}
+for linea in entrada.readlines():
+  print linea
+\end{python}
+Sin embargo, tal vez la opción más fácil e intuitiva es
+\begin{python}
+for linea in entrada:
+  print linea
+\end{python}
+Es decir, el archivo <se comporta como una secuencia!
+
+Ahora, la línea viene como una sola cadena, con espacios etc. Para extraer la información, primero necesitamos dividirlo en palabras:
+\begin{python}
+palabras = linea.split()
+\end{python}
+Si todos los datos en realidad son números, entonces tenemos que procesar cada palabra, convirtiéndola en un número:
+\begin{python}
+datos = []
+for i in palabras:
+  datos.append( float(i) )
+\end{python}
+
+Resulta que hay una manera más fácil, de más alto nivel, y (!) más rápida de hacer eso:
+\begin{python}
+map(float, palabras)
+\end{python}
+Eso literalmente mapea la función \inl{float} sobre la lista \inl{palabras}.
+
+Combinando todo, podemos escribir
+\begin{python}
+entrada = open("datos.dat", "r")
+
+for linea in entrada:
+  datos = map( float, linea.split() )
+\end{python}
+Ahora adentro del bucle podemos manipular los datos como queramos.
+
+\ej Para un archivo con dos columnas, leer los datos de cada columna en dos listas por separado.
+
+
+\section{Escribir archivos}
+
+El método de redirigir la salida que vimos arriba es rápido y fácil. Sin embargo, no es de ninguna manera flexible, por ejemplo no 
+podemos especificar desde nuestro programa el nombre del archivo de salida, ni escribir en dos archivos diferentes.
+
+Para hacer eso, necesitamos poder abrir un archivo para escribirse:
+\begin{python}
+salida = open("resultados.dat", "w")
+\end{python}
+
+La parte más complicada viene al momento de escribir en el archivo. Para hacerlo, ocupamos la función \inl{salida.write()}.
+Sin embargo, esta función puede escribir solamente \emph{cadenas}. Por lo tanto, si queremos escribir números contenidos en variables, es necesario convertirlos primero a la forma de cadena.
+
+Una manera de hacer eso es con la función \inl{str()}, y concatenar distintas cadenas con \inl{+}:
+\begin{python}
+a = 3
+s = "El valor de a es " + str(a)
+\end{python}
+Sin embargo, para largas secuencias de datos eso se vuelve latoso.
+
+\section{Sustitución de variables en cadenas}
+La manera más elegante de hacerlo es con la sustitución de variables en cadenas\footnote{Eso es muy parecido a \inl{printf} en C.}. En una cadena ponemos una secuencia especial de caracteres, empezando por \texttt{\%}, que indica que se sustituirá el valor de una variable:
+\begin{python}
+a = 3
+s = "El valor de a es %d" % a
+b = 3.5; c = 10.1
+s = "b = %g;  c = %g" % (b, c)
+\end{python}
+El caracter despues del \texttt{\%} indica el tipo de variable que incluir en la cadena: \inl{d} corresponde a un entero, \inl{g} o \inl{f} a un flotante, y \inl{s} a otra cadena. También se puede poner un número entero, que es el tamaño del campo, y un punto decimal seguido por un número, que da el número de decimales para el caso de \inl{f}.
+
+Finalmente ahora podemos imprimir en el archivo, por ejemplo
+\begin{python}
+salida.write("%g\t%g" % (a,b) )
+\end{python}
+Aquí, \inl{\t} representa un tabulador, y \inl{\n} una nueva línea.
+
+ 
+
+
+
+
+
+
+
+
+
+
+
