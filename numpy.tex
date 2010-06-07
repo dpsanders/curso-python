@@ -44,5 +44,326 @@ Para imprimir un número con una precisión dada, usamos
 nprint(x, 20)
 \end{python}
 
+\section{La biblioteca \texttt{numpy}}
+Hasta ahora, hemos utilizado listas para guardar y manipular datos. Sin embargo, las listas no se comportan como vectores, y menos como matrices --al sumarlos no se comportan de la manera adecuada, etc. El propósito de la biblioteca \inl{numpy} es justamente el de proporcionar objetos que represantan a vectores y matrices matemáticos, con todas las bondades que traen consigo este tipo de objetos.
+
+La biblioteca se carga con
+\begin{python}
+from numpy import *
+\end{python}
+Provee muchas funciones para trabajar con vectores y matrices.
+
+\section{Creando vectores}
+Los vectores se llaman (aunque es un poco confuso) \inl{array}s, y se pueden crear de distintas maneras. 
+Son como listas, pero con propiedades y métodos adicionales para funcionar como objetos matemáticos.
+La manera más general de crear un vector es justamente convirtiendo desde una lista de números:
+\begin{python}
+from numpy import *
+
+a = array( [1, 2, -1, 100] )
+\end{python}
+Un vector de este tipo puede contener sólo un tipo de objetos, a diferencia de una lista normal de Python.
+Si todos los números en la lista son enteros, entonces el tipo del arreglo también lo es, como se puede comprobar con \inl{a.dtype}.
+
+Es común querer crear vectores de cierto tamaño con todos ceros:
+\begin{python}
+b = zeros( 10 )
+print b
+\end{python}
+o todos unos:
+\begin{python}
+b = ones( 10 )
+print b
+\end{python}
+
+También hay distintas maneras de crear vectores que consisten en rangos ordenados, por ejemplo \inl{arange}, que funciona como \inl{range}, con un punto inicial, un punto final, y un paso:
+\begin{python}
+a = arange(0., 10., 0.1)
+\end{python}
+y \inl{linspace}, donde se especifica puntos iniciales y finales y un número de entradas:
+\begin{python}
+l = linspace(0., 10., 11)
+\end{python}
+
+Una notación abreviada para construir vectores es \inl{r_}, que se puede pensar como una abreviación de ``vector \defn{r}englón'':
+\begin{python}
+a = r_[1,2,10,-1.]
+\end{python}
+Este método se extiende para dar una manera rápida de construir rangos:
+\begin{python}
+r_[3:7]
+r_[3:7:0.5]
+r_[3:7:10j]
+\end{python}
+Este último utiliza un ``número complejo'' simplemente como otra notación, y es el equivalente de \inl{linspace(3,7,10)}.
+
+
+
+
+\section{Operando con vectores}
+
+Los vectores creados de esta manera se pueden sumar, restar etc., como si fueran vectores matemáticos. Todas las operaciones se llevan a cabo entrada por entrada:
+\begin{python}
+a = array( [1., 4., 7. ])
+b = array( [1., 2., -2. ])
+print a+b, a-b, a*b, a/b, a**b
+\end{python}
+
+\ej >Cómo se puede crear un vector de 100 veces $-3$?
+
+Las funciones más comunes entre vectores ya están definidas en \inl{numpy}, entre las cuales se encuentran \inl{dot(a, b)} para productos escalares de dos vectores de la mismo longitud, y \inl{cross(a, b)} para el producto cruz de dos vectores de longitud $3$.
+
+Además, cualquier función matemática como \inl{sin} y \inl{exp} se puede aplicar directamente a un vector, y regresará un vector compuesto por esta función aplicada a cada entrada del vector, tipo \inl{map}.
+
+Es más: al definir una función el usuario, esta función normalmente también se pueden aplicar directamente a un vector:
+\begin{python}
+def gauss(x):
+  return 1./ (sqrt(2.)) * exp(-x*x / 2.)
+
+gauss( r_[0:10] )
+\end{python}
+
+\section{Extrayendo partes de un vector}
+Para extraer subpartes de un vector, la misma sintaxis funciona como para listas: se extraen componentes (entradas) individuales con
+\begin{python}
+a = array([0, 1, 2, 3])
+print a[0], a[2]
+\end{python}
+y subvectores con
+\begin{python}
+b = a[1:3]
+\end{python}
+Nótese, sin embargo, que en este caso la variable \inl{b} \emph{no} es una \emph{copia} de esta parte de \inl{a}. Más bien, es una \defn{vista} de \inl{a}, así que ahora si hacemos
+\begin{python}
+b[1] = 10
+\end{python}
+entonces la entrada correspondiente de \inl{a} \emph{<también cambia!} Este fenómeno también funciona con listas:
+\begin{python}
+l=[1,2,3]; k=l; k[1] = 10
+\end{python}
+En general, en Python las variables son \defn{nombres} de objetos; al poner \inl{b = a}, tenemos <un mismo objeto con dos nombres!
+
+\section{Matrices}
+Las matrices se tratan como vectores de vectores, o listas de listas:
+\begin{python}
+M = array( [ [1, 2], [3, 4] ] )
+\end{python}
+La forma de la matriz se puede ver con
+\begin{python}
+M.shape
+\end{python}
+y se puede manipular con
+\begin{python}
+M.shape = (4, 1); print M
+\end{python}
+o con
+\begin{python}
+M.reshape( 2, 2 )
+\end{python}
+De hecho, eso es una manera útil de crear las matrices:
+\begin{python}
+M = r_[0:4].reshape(2,2)
+\end{python}
+
+Podemos crear una matriz desde una función:
+\begin{python}
+def f(i, j):
+  return i+j
+M = fromfunction(f, (3, 3))
+\end{python}
+
+
+
+
+Dado que las matrices son vectores de vectores, al hacer
+\begin{python}
+print M[0]
+\end{python}
+nos regresa la primera componente de \inl{M}, que es justamente un \emph{vector}, viz.~el primer renglón de \inl{M}.
+Si queremos cierta entrada de la matriz, entonces más bien necesitamos especificar dos coordenadas:
+\begin{python}
+M[0][1]
+M[0, 1]	
+\end{python}
+[También podemos poner \inl{M.item(1)} que aparentemente es maś eficiente.]
+
+Para extraer ciertas renglones o columnas de \inl{M}, utilizamos una extensión de la notación para vectores:
+\begin{python}
+M = identity(10)	 	# matriz identidad de 10x10
+M[3:5]
+M[:, 3:5]
+M[3:9, 3:5]
+\end{python}
+
+
+Una función poderosa para construir matrices repetidas es \inl{tile}
+\begin{python}
+tile( M, (2,2) )
+\end{python}
+
+Otros métodos útiles son \inl{diagonal}, que regresa una diagonal de un arreglo:
+\begin{python}
+diagonal(M)
+diagonal(M, 1)
+\end{python}
+y \inl{diag}, que construye una matriz con el vector dado como diagonal:
+\begin{python}
+diag([1,2,3])
+diag([1,2,3], 2)
+\end{python}
+
+
+
+\section{Álgebra lineal}
+Adentro de \inl{numpy} hay un módulo de álgebra lineal que permite hacer las operaciones más frecuentes que involucran matrices y vectores.
+
+Para empezar, todavía no adentro del módulo \inl{numpy}, están  los productos de una matriz \inl{M} con un vector \inl{v} y de dos matrices. Los dos se llevan a cabo con \inl{dot}:
+\begin{python}
+M = r_[0:4].reshape(2,2)
+v = r_[3, 5]
+dot(M, v)
+dot(M, M)
+\end{python}
+
+\ej Utiliza el \emph{método de potencias} para calcular el vector propio de una matriz cuadrada $M$ correspondiente al valor propio de mayor módulo. Este método consiste en considerar la iteración $M^n \cdot v$.
+
+Para álgebra lineal, se ocupa el módulo \inl{linalg}:
+\begin{python}
+from numpy import linalg
+\end{python}
+Entonces las funciones del módulo se llaman e.g.\ \inl{norm} para la norma de un vector se llama
+\begin{python}
+linalg.norm(v)
+\end{python}
+Una alternativa es importar todas las funciones de este submódulo
+\begin{python}
+from numpy.linalg import *
+\end{python}
+entonces ya no se pone \inl{linalg.}, y se puede referir simplemente a \inl{norm}.
+
+Algunas de las funciones útiles incluyen \inl{linalg.eig} para calcular los valores y vectores propios de una matrix:
+\begin{python}
+linalg.eig(M)
+\end{python}
+y \inl{linalg.eigvals} para solamente los valores propios. Hay versiones especiales \inl{eigh} y \inl{eigvalsh} para matrices hermitianas o simétricas reales.
+
+También hay \inl{det} para determinante, e \inl{inv} para la inversa de una matriz.
+Finalmente, se puede resolver un sistema de ecuaciones lineales $M \cdot x = b$ con
+\begin{python}
+linalg.solve(M, b)
+\end{python}
+
+\section{Funciones para resumir información sobre vectores y matrices}
+Hay varias funciones que regresan información resumida sobre vectores y matrices, por ejemplo
+\begin{python}
+a = r_[0:16].reshape(4,4)
+
+a.max()
+a.min(1)	# actua sobre solamente un eje y regresa un vector
+a.mean(0)  	
+a.mean(1)
+a.sum(1)
+\end{python}
+
+También podemos seleccionar a los elementos de un arreglo que satisfacen cierta propiedad:
+\begin{python}
+a > 5
+a[a > 5] = 0
+\end{python}
+
+Además existe una función \inl{where}, que es como una versión vectorizada de \inl{if}:
+\begin{python}
+b = r_[0:16].reshape(4,4)
+c = list(b.flatten())
+c.reverse()
+c = array(c).reshape(4,4)
+
+a = where(b < 5, b, c)
+\end{python}
+Este comando pone cada entrada de \inl{a} igual a la entrada correspondiente de \inl{b} si ésta es menor que $5$, o a la de \inl{c} si no.
+
+
+
+
+
+
+
+\section{Números aleatorios}
+
+La biblioteca \inl{numpy} incluye un módulo amplio para manipular números aleatorios, llamado \inl{random}.
+Como siempre, las funciones se llaman, por ejemplo, \inl{random.random()}. Para facilitarnos la vida, podemos importar todas estas funciones al espacio de nombres con
+\begin{python}
+from numpy import *
+random?	# informacion sobre el modulo
+from random import *		# 'random' esta
+\end{python}
+o
+\begin{python}
+from numpy.random import *
+\end{python}
+Nótese que hay otro módulo \inl{random} que existe afuera de \inl{numpy}, con distinta funcionalidad.
+
+La funcionalidad básica del módulo es la de generar números aleatorios distribuidos de manera uniforme en el intervalo $[0,1)$:
+\begin{python}
+random()
+for i in xrange(10): 
+  random()
+\end{python}
+Al poner \inl{random(N)}, nos regresa un vector de números aleatorios de longitud \inl{N}.
+
+Para generar una matriz aleatoria, podemos utilizar
+\begin{python}
+rand(10, 20)
+\end{python}
+Para números en un cierto rango $[a, b)$, podemos utilizar 
+\begin{python}
+uniform(-5, 5, 10)
+\end{python}
+
+
+También hay diversas funciones para generar números aleatorios con distribuciones no-uniformes, por ejemplo \inl{exponential(10)} y \inl{randn(10, 5, 10)} para una distribución normal, o \inl{binomial(10, 3, 100)}.
+
+
+
+
+
+\ej Calcula la distribución de distancias entre valores propios consecutivos de una matriz aleatoria real y simétrica.
+
+
+\section{Transformadas de Fourier}
+Otro submódulo útil de \inl{numpy} es \inl{fft}, que provee transformadas rápidas de Fourier:
+\begin{python}
+from numpy import *
+
+x = arange(1024)
+f = fft.fft(x)
+y = fft.ifft(f)
+linalg.norm( x - y )
+\end{python}
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
