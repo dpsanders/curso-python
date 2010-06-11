@@ -1,0 +1,48 @@
+\chapter{Ejemplos de cálculos y visualizaciones}
+
+\section{Integración de ecuaciones diferenciales ordinarias}
+
+Veamos unas rutinas y herramientas para integrar ecuaciones diferenciales. Ocuparemos las técnicas básicas  que se ven en el curso de Física Computacional --los métodos de Euler y Runge--Kutta.
+
+La ecuación que resolveremos es
+\begin{equation}
+\dot{\x} = \f(\x).
+\end{equation}
+Recordemos que eso es una notación para decir que
+\begin{equation}
+\dot{\x}(t) = \f(\x(t)).
+\end{equation}
+Es decir, si estamos en el punto $\x(t)$ al tiempo $t$, entonces la derivada instantánea en este momento y este punto del espacio fase está dada por $\f(\x(t))$.
+
+Para resolver esta ecuación en la computadora, es necesario discretizarla de una manera u otra.
+La manera más sencilla para hacerlo es discretizando el tiempo en pasos iguales de tamaño $\delta t$ y aproximando la derivada por una diferencia finita, o sea expandiendo en una serie de Taylor, lo cual da
+\begin{equation}
+ \x(t+\delta t) \simeq \x(t) + \delta t \dot{\x}(t) + O( (\delta t) ^2) = \x(t) + h \f(\x(t)) + O( (\delta t) ^2),
+\end{equation}
+donde $h = \delta t$ es el paso de tiempo.
+Eso nos da el \defn{método de Euler}. Lo podemos implementar como una función que regresa el valor nuevo de la variable:
+\begin{python}
+def euler(t, x, h, f):
+  return x + h*f(x)
+\end{python}
+Nótese que la función \inl{euler} toma \emph{el nombre de la función \inl{f} que integrar} como argumento.
+
+Ahora para integrar la ecuación entre un tiempo initial $t_0$ y un tiempo final $t_f$, repetimos este paso muchas veces:
+\begin{python}
+def integrar(t0, tf, h, x0, f):
+  lista_t = []
+  lista_x = []
+  
+  x = x0
+  for t in arange(t0, tf+h/2., h):
+    x = euler(t, x, h, f)
+    
+    lista_t.append(t)
+    lista_x.append(x)
+    
+  return lista_t, lista_x
+\end{python}
+
+
+
+

@@ -194,9 +194,6 @@ plt.show()
 \end{python}
 
 
-Campos vectoriales se pueden dibujar con \inl{quiver}\footnote{Es una broma nerd: ``quiver'' quiere decir ``carcaj'' (un objeto donde se guardan las flechas).}, que acepta 4 matrices, $X$ y $Y$ que dan las coordenadas $X$ y $Y$ de los puntos en el campo, y $U$ y $V$, que son las componentes de los vectores que dibujar en cada punto.
-
-
 
 \section{Uso avanzado de \inl{matplotlib}}
 Para usos más avanzados de \inl{matplotlib}, es necesario entender mejor la estructura interna del paquete, que es justamente lo que esconde \inl{pylab}.  Por ejemplo, para colocar una flecha en un dibujo, utilizamos ``patches'' (``parches''):
@@ -213,6 +210,73 @@ ax.add_patch(arr)
 arr.set_facecolor('g')
 show()
 \end{python}
+
+
+\section{Mallas con \texttt{meshgrid}}
+
+
+
+Por lo tanto, es necesario primero construir la malla donde se calculará el campo vectorial. Esto se hace con \inl{meshgrid}, que acepta dos vectores 1D que dan las coordenadas $x$ y $y$ de los puntos de la malla. \inl{meshgrid} construye una malla cuyos vértices son los puntos en el producto cartesiano de los dos conjuntos de puntos. Regresa una tupla de dos matrices, que dan las coordenadas $x$ y $y$ respectivamente de los puntos de la malla:
+\begin{python}
+x = r_[-5:5:11j]
+y = r_[-5:5:11j]
+
+X, Y = meshgrid(x, y)
+print X, Y
+\end{python}
+Así que \inl{meshgrid} en algún sentido provee un mapa de las entradas de la matriz a sus coordenadas en el espacio real 2D.
+
+El punto de esta construcción es que ahora las funciones se pueden evaluar en \emph{cada punto de la red al mismo tiempo}. Por ejemplo, para tener una matriz que representa la suma de las componentes $x$ y $y$ en cada punto de la malla, hacemos
+\begin{python}
+Z = X + Y
+\end{python}
+Para tener la distancia de la origen en cada punto, hacemos
+\begin{python}
+R = sqrt(X*X + Y*Y)
+\end{python}
+
+Una abreviación del comando \inl{meshgrid}, usando una notación indicial parecida a la que ocupa \inl{r_}, es
+\begin{python}
+X, Y = mgrid[-5:5:11j, -5:5:11j]
+\end{python}
+
+
+
+\section{Campos vectoriales}
+Los campos vectoriales se pueden dibujar con la función \inl{quiver}\footnote{Eso es una broma nerd: ``quiver'' quiere decir ``carcaj'' (un objeto donde se guardan las flechas).}. Esta función acepta 4 matrices, $X$ y $Y$ que dan las coordenadas $X$ y $Y$ de los puntos de la malla donde se especifica el campo, y $U$ y $V$, que son las componentes de los vectores que dibujar en cada punto.
+
+Por ejemplo, podemos dibujar un campo radial al poner
+\begin{python}
+X, Y = mgrid[-5:5:11j, -5:5:11j]
+quiver(X, Y, X, Y)
+\end{python}
+ya que en el punto $(x,y)$ de la malla ponemos el vector $(x,y)$.
+Lo podemos colorear según el valor de la distancia del origen con
+\begin{python}
+X, Y = mgrid[-5:5:11j, -5:5:11j]
+R =  sqrt(X*X + Y*Y)
+quiver(X, Y, X, Y, R)
+\end{python}
+
+
+Algunos campos más interesantes son
+\begin{python}
+quiver(X, Y, Y, X)
+quiver(X, Y, Y, -X)
+\end{python}
+Resulta que se ven un poco ``deformados'', ya que cada flecha se dibuja empezando en el punto dado de la malla.
+Se ve más ordenado al colocar el punto medio de la flecha en el punto de la malla:
+\begin{python}
+quiver(X, Y, Y, X, R,  pivot='middle')
+\end{python}
+
+
+
+
+
+
+
+
 
 
 \section{Gráficas en 3D}
@@ -237,10 +301,32 @@ ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap=cm.jet)
 plt.show()
 \end{python}
 
-\section{Interacción con el ratón y teclado}
-Se puede interactuar con el ratón y con el teclado. Veamos un ejemplo donde se dibuja el campo de una serie de cargas eléctricas especificadas así.
+\section{Interacción con el mouse y el teclado}
+Se puede interactuar con el mouse y con el teclado de una manera relativamente sencilla.
 
+Para interactuar con el mouse, creamos una función que se llamará cuando \inl{pylab} note que hay un evento que involucre el mouse.
+Esta función toma un solo argumento, que suele llamarse \inl{event}. \inl{pylab} manda a la función un objeto que representa el evento, incluyendo cuál botón se
+presionó y en que posición de la gráfica. La función se registra ante \inl{pylab} con la función \inl{connect}.
 
+Lo mismo tiene para el teclado. Así que el código más sencillo es el siguiente. Nótese que es necesario que haya una gráfica pre-existente antes de poder interactuar con ella.
+\begin{python}
+from pylab import *
 
+def teclado(event):
+  print "Se tecleó %s en la posicion (%g, %g)" % event.key, event.xdata, event.ydata
 
+def mouse(event):	
+  if event.button != 1: 
+    return
+  x,y = event.xdata, event.ydata
+  print "Se oprimió el botón izquierdo en (%g, %g)" % (x, y)
 
+x = arange(10)
+y = x*x
+p, = plot(x, y)
+
+show()
+
+connect('button_press_event', mouse)
+connect('key_press_event', teclado)
+\end{python}
