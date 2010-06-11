@@ -1,0 +1,246 @@
+\chapter{Gráficas con \texttt{matplotlib}}
+
+En este capítulo, veremos cómo podemos crear gráficas dentro de Python, usando el paquete \inl{matplotlib} y su entorno \inl{pylab}.
+
+\section{Entorno \inl{pylab}} 
+El paquete \inl{matplotlib} dibuja las gráficas. Para integrar mejor este módulo con el uso interactivo, y en particular con \inl{ipython}, incluye un módulo \inl{pylab}, que provee muchos comandos de utilidad para manejar \inl{matplotlib}.
+
+La manera más efectiva de cargar la biblioteca \inl{pylab} es al mero momento de \emph{correr} \inl{ipython}: se da la opción \inl{-pylab} en la línea de comandos\footnote{Yo encuentro conveniente declarar un nuevo comando \texttt{pylab} agregando la línea \\ \texttt{alias pylab='ipython -pylab'} en el archivo \texttt{.bashrc} en mi directorio hogar.). Entonces se puede correr simplemente a poner \inl{pylab} en la línea de comandos.}:
+\begin{python}
+> ipython -pylab
+\end{python}
+Si todo funciona correctamente, deberías recibir el mensaje
+``Welcome to pylab, a matplotlib-based Python environment.'' En este caso, ya se habrá cargado el entorno \inl{pylab}, que incluye 
+el módulo \inl{matplotlib} para llevar a cabo gráficas, y también carga automáticamente \inl{numpy}, por lo cual no es necesario volver a cargar estos módulos para uso interactivo. [Sí es necesario cargarlos explícitamente en cualquier script que ocupe gráficas.]
+
+\section{Gráficas básicas}
+El comando principal de \inl{matplotlib} / \inl{pylab} es \inl{plot}. Acepta uno o dos listas o vectores de \inl{numpy}, que corresponden a las coordenadas $y$ (si hay un solo vector) o $x$ y $y$ de una gráfica 2D.
+Por ejemplo, si queremos graficar los cuadrados de los números de $1$ a $10$, podemos hacer
+\begin{python}
+x = arange(10)
+y = x * x
+plot(x, y)
+\end{python}
+Si queremos puntos en lugar de líneas, hacemos
+\begin{python}
+plot(x, y, 'o')
+\end{python}
+al estilo de MATLAB. (De hecho, \inl{pylab} se creó basándose en el comportamiento de MATLAB.)
+
+Nótese que por defecto las gráficas se \emph{acumulan}. Este comportamiento se puede modficar con \inl{hold(False)}, que reemplaza las gráficas con las nuevas, y \inl{hold(True)}, que regresa a la funcionalidad por defecto.  También se puede utilizar \inl{clf()} para limpiar la figura.
+
+
+
+
+La ventana que cree \inl{matplotlib} incluye botones para poder hacer acercamientos y moverse a través de la gráfica.
+También incluye un botón para exportar la figura a un archivo en distintos formatos. Los formatos de principal interés son PDF, que es un formato ``vectorial'' (que incluye las instrucciones para dibujar la figura), que da la calidad necesaria para las publicaciones, y PNG, que da una imagen de la figura, y es adecuada para páginas web.
+
+\section{Cambiando el formato}
+
+Hay distintos tipos de líneas y puntos disponibles, y se puede modificar el tamaño de ambos. Todas las opciones están disponible a través de la documentación de \inl{plot}, a través de \inl{plot?}. Además, los colores se pueden especificar explícitamente:
+\begin{python}
+x = arange(10)
+plot(x, x**2, 'ro', x, 2*x, 'gx')
+plot(x, 3*x, 'bo-', linewidth=3, markersize=5, markerfacecolor='red', markeredgecolor='green', markeredgewidth=2)
+\end{python}
+Se pueden dar cualquier número de gráficas que dibujar en un solo comando. Si el formato no se da explícitamente, entonces \inl{matplotlib} escoge el siguiente de una secuencia razonable de estilos.
+
+\section{Etiquetas}
+
+Se puede proporcionar un título de la gráfica con \inl{title}
+\begin{python}
+title("Algunas funciones sencillas")
+\end{python}
+
+
+Los ejes se pueden etiquetar con 
+\begin{python}
+xlabel("x")
+ylabel("f(x)")
+\end{python}
+Una bondad de \inl{matplotlib} es que las etiquetas se pueden expresar en formato \LaTeX\ y se interpretará automáticamente de la forma adecuada:
+\begin{python}
+xlabel("$x$")
+ylabel("$x^2, 2x, \exp(x)$", fontsize=16)	# cambia tamano de fuente 
+\end{python}
+
+También se pueden colocar etiquetas arbitrarias con
+\begin{python}
+text(4.6, 35, "Punto de\ninteres")
+\end{python}
+Si se le asigna a una variable, entonces se puede volver a remover con
+\begin{python}
+etiq = text(4.6, 35, "Punto de\ninteres")
+etiq.remove()
+draw()
+\end{python}
+Es necesario llamar a \inl{draw()} para volver a dibujar la figura.
+
+\section{Figuras desde scripts}
+Una vez que una figura se vuelve complicada, es necesario recurrir a un script que contenga las instrucciones para dibujarla. Eso es \emph{sumamente importante} en particular para preparar figuras para un documento, donde se ajustará varias veces una sola figura hasta que quede bien.
+
+Para utilizar \inl{matplotlib} desde un script, es necesario incluir la biblioteca \inl{pylab}. Luego se puede utilizar \inl{plot}. Para ver la imagen, a veces es necesario poner el comando \inl{show()}:
+\begin{python}
+from pylab import *
+x = arange(10)
+plot(x, x**2)
+show()
+\end{python}
+
+
+Eso también es necesario al utilizar \inl{pylab} desde \inl{ipython} sin poner \inl{ipython -pylab}, pero en este caso, es necesario cerrar la gráfica para poder volver a utilizar el \inl{ipython}.
+
+\section{Escalas logarítmicas}
+Para utilizar ejes con escalas logarítimicas, hay tres funciones: \inl{loglog}, \inl{semilogy} y \inl{semilogx}.
+Se utilizan en lugar de \inl{plot}:
+\begin{python}
+t = arange(1000)
+p = t**(-0.5)
+loglog(t, p, 'o')
+\end{python}
+
+
+\section{Múltiples dibujos}
+Está fácil hacer múltiples dibujos alineados con \inl{subplot}. Su sintaxis es
+\begin{python}
+subplot(num_renglones, num_columnas, num_dibujo)
+\end{python}
+Es decir, se especifican el número de renglones y columnas que uno quiere, y el último número especifica cuál dibujo es los \inl{num_renglones} $\times$ \inl{num_columnas} es. Aquí está un ejemplo adaptado de la documentación de \inl{matplotlib}:
+\begin{python}
+def f(t):
+  """Oscilacion amortiguada"""
+  c = cos(2*pi*t)
+  e = exp(-t)
+  return c*e
+
+t1 = arange(0.0, 5.0, 0.1)
+t2 = arange(0.0, 5.0, 0.02)
+t3 = arange(0.0, 2.0, 0.01)
+
+subplot(211)
+l = plot(t1, f(t1), 'bo', t2, f(t2), 'k--', markerfacecolor='green')
+grid(True)
+title('Amortiguacion de oscilaciones')
+ylabel('Amortiguada')
+
+subplot(212)
+plot(t3, cos(2*pi*t3), 'r.')
+grid(True)
+xlabel('tiempo $t$ (s)')
+ylabel('No amortiguada')
+show()
+\end{python}
+
+\section{Animaciones}
+Las gráficas hechas en \inl{matplotlib} se pueden animar. La manera más fácil es simplemente redibujar la gráfica completa cada vez que se cambian los datos. Sin embargo, eso no es eficiente, ya que se tiene que recalcular cada vez las etiquetas etc.
+
+Una mejor solución es que cada vez se cambie simplemente el contenido de datos de la gráfica. Primero es necesario asignarle a la gráfica un nombre:
+\begin{python}
+from pylab import *
+x = arange(10)
+y = x*x
+ion()
+p, = plot(x, y)
+
+for a in arange(0, 10, 0.1):
+  x = arange(10) + a
+  p.set_xdata(x)
+  draw()
+\end{python}
+Nótese el comando \inl{ion()} (``interactividad prendida").
+El comando \inl{p, = plot(x,y)} es necesario ya que el comando \inl{plot} regresa una lista de todos los objetos en el plot. Se utiliza esta asignación de tuplas para extraer realmente el primer elemento; sería equivalente (pero menos natural) poner \inl{p = plot(x,y)[0]}.
+
+
+\section{Otros tipos de gráficas}
+Aparte del tipo básico de gráficas que hemos visto hasta ahora, que permiten llevar a cabo gráficas de datos como puntos y/o líneas, existe en \inl{matplotlib} una gran variedad de otros tipos de gráficas posibles; se refiere a la página principal \url{http://matplotlib.sourceforge.net} y a la página 
+\url{http://www.scipy.org/Cookbook/Matplotlib} que contiene muchos ejemplos.
+
+Por ejemplo, podemos visualizar matrices 2D como ``heat-maps'' (mapas en los cuales el color corresponde al valor de la matriz) con \inl{pcolor} y \inl{imshow}. Nótese que para crear una figura cuadrada, se puede utilizar
+\begin{python}
+f = figure( figsize=(8,8) )
+\end{python}
+
+Otro tipo de gráfica disponible es un histograma. \inl{pylab} puede calcular y dibujar la gráfica en un solo comando:
+\begin{python}
+from pylab import randn, hist
+x = randn(10000)
+hist(x, 100, normed=True)
+\end{python}
+Hay una función \inl{histogram} en \inl{numpy} que calcula histogramas sin dibujarlos.
+
+Aquí va una versión tomada de la documentación:
+\begin{python}
+import numpy as np
+import matplotlib.mlab as mlab
+import matplotlib.pyplot as plt
+
+mu, sigma = 100, 15
+x = mu + sigma*np.random.randn(10000)
+
+# the histogram of the data
+n, bins, patches = plt.hist(x, 50, normed=1, facecolor='green', alpha=0.75)
+
+# add a 'best fit' line
+y = mlab.normpdf( bins, mu, sigma)
+l = plt.plot(bins, y, 'r--', linewidth=1)
+
+plt.xlabel('Smarts')
+plt.ylabel('Probability')
+plt.title(r'$\mathrm{Histogram\ of\ IQ:}\ \mu=100,\ \sigma=15$')
+plt.axis([40, 160, 0, 0.03])
+plt.grid(True)
+
+plt.show()
+\end{python}
+
+
+Campos vectoriales se pueden dibujar con \inl{quiver}\footnote{Es una broma nerd: ``quiver'' quiere decir ``carcaj'' (un objeto donde se guardan las flechas).}, que acepta 4 matrices, $X$ y $Y$ que dan las coordenadas $X$ y $Y$ de los puntos en el campo, y $U$ y $V$, que son las componentes de los vectores que dibujar en cada punto.
+
+
+
+\section{Uso avanzado de \inl{matplotlib}}
+Para usos más avanzados de \inl{matplotlib}, es necesario entender mejor la estructura interna del paquete, que es justamente lo que esconde \inl{pylab}.  Por ejemplo, para colocar una flecha en un dibujo, utilizamos ``patches'' (``parches''):
+\begin{python}
+from pylab import *
+   
+x = arange(10)
+y = x
+
+plot(x, y)
+arr = Arrow(2, 2, 1, 1, edgecolor='white')
+ax = gca()   # obtener el objeto tipo "eje" ("axis")
+ax.add_patch(arr)
+arr.set_facecolor('g')
+show()
+\end{python}
+
+
+\section{Gráficas en 3D}
+En versiones recientes de \inl{matplotlib}, hay soporte limitado para gráficas en 3D. 
+El módulo relevante es \inl{mplot3d}.
+Un ejempo tomado de la documentación:
+\begin{python}
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib import cm
+import matplotlib.pyplot as plt
+import numpy as np
+
+fig = plt.figure()
+ax = Axes3D(fig)
+X = np.arange(-5, 5, 0.25)
+Y = np.arange(-5, 5, 0.25)
+X, Y = np.meshgrid(X, Y)
+R = np.sqrt(X**2 + Y**2)
+Z = np.sin(R)
+ax.plot_surface(X, Y, Z, rstride=1, cstride=1, cmap=cm.jet)
+
+plt.show()
+\end{python}
+
+\section{Interacción con el ratón y teclado}
+Se puede interactuar con el ratón y con el teclado. Veamos un ejemplo donde se dibuja el campo de una serie de cargas eléctricas especificadas así.
+
+
+
+
+
