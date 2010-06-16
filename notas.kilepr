@@ -3,8 +3,8 @@ def_graphic_ext=eps
 img_extIsRegExp=false
 img_extensions=.eps .jpg .jpeg .png .pdf .ps .fig .gif
 kileprversion=2
-kileversion=2.0.85
-lastDocument=estructuras-de-control.tex
+kileversion=2.1 beta2
+lastDocument=introduccion.tex
 masterDocument=
 name=notas
 pkg_extIsRegExp=false
@@ -99,12 +99,12 @@ order=1
 [item:introduccion.tex]
 archive=true
 column=0
-encoding=
-highlight=
-line=0
+encoding=UTF-8
+highlight=LaTeX
+line=7
 mode=
-open=false
-order=-1
+open=true
+order=0
 
 [item:notas.kilepr]
 archive=true

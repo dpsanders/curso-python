@@ -1,0 +1,3 @@
+Barack Obama,Presidencia actual
+George Bush,Anterior
+Felipe Calderon,De Mexico
