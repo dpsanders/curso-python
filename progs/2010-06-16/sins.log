@@ -1,0 +1,156 @@
+This is pdfTeXk, Version 3.141592-1.40.3 (Web2C 7.5.6) (format=pdflatex 2009.11.15)  16 JUN 2010 16:32
+entering extended mode
+ %&-line parsing enabled.
+**sins
+(./sins.tex
+LaTeX2e <2005/12/01>
+Babel <v3.8h> and hyphenation patterns for english, usenglishmax, dumylang, noh
+yphenation, loaded.
+(/usr/share/texmf-texlive/tex/latex/base/article.cls
+Document Class: article 2005/09/16 v1.4f Standard LaTeX document class
+(/usr/share/texmf-texlive/tex/latex/base/size10.clo
+File: size10.clo 2005/09/16 v1.4f Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/usr/share/texmf-texlive/tex/latex/graphics/graphicx.sty
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf-texlive/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+(/usr/share/texmf-texlive/tex/latex/graphics/graphics.sty
+Package: graphics 2006/02/20 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf-texlive/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(/etc/texmf/tex/latex/config/graphics.cfg
+File: graphics.cfg 2007/01/18 v1.5 graphics configuration of teTeX/TeXLive
+)
+Package graphics Info: Driver file: pdftex.def on input line 90.
+
+(/usr/share/texmf-texlive/tex/latex/pdftex-def/pdftex.def
+File: pdftex.def 2007/01/08 v0.04d Graphics/color for pdfTeX
+\Gread@gobject=\count87
+))
+\Gin@req@height=\dimen103
+\Gin@req@width=\dimen104
+)
+(/usr/share/texmf-texlive/tex/latex/subfigure/subfigure.sty
+Package: subfigure 2002/03/15 v2.1.5 subfigure package
+\subfigtopskip=\skip43
+\subfigcapskip=\skip44
+\subfigcaptopadj=\dimen105
+\subfigbottomskip=\skip45
+\subfigcapmargin=\dimen106
+\subfiglabelskip=\skip46
+\c@subfigure=\count88
+\c@lofdepth=\count89
+\c@subtable=\count90
+\c@lotdepth=\count91
+
+****************************************
+* Local config file subfigure.cfg used *
+****************************************
+(/usr/share/texmf-texlive/tex/latex/subfigure/subfigure.cfg)
+\subfig@top=\skip47
+\subfig@bottom=\skip48
+) (./sins.aux)
+\openout1 = `sins.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 5.
+LaTeX Font Info:    ... okay on input line 5.
+
+(/usr/share/texmf/tex/context/base/supp-pdf.tex
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count92
+\scratchdimen=\dimen107
+\scratchbox=\box26
+\nofMPsegments=\count93
+\nofMParguments=\count94
+\everyMPshowfont=\toks15
+\MPscratchCnt=\count95
+\MPscratchDim=\dimen108
+\MPnumerator=\count96
+\everyMPtoPDFconversion=\toks16
+) <sin1.pdf, id=1, 578.16pt x 433.62pt>
+File: sin1.pdf Graphic file (type pdf)
+ <use sin1.pdf>
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 8.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 8.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 8.
+
+<sin2.pdf, id=2, 578.16pt x 433.62pt>
+File: sin2.pdf Graphic file (type pdf)
+ <use sin2.pdf>
+<sin3.pdf, id=3, 578.16pt x 433.62pt>
+File: sin3.pdf Graphic file (type pdf)
+ <use sin3.pdf>
+<sin4.pdf, id=4, 578.16pt x 433.62pt>
+File: sin4.pdf Graphic file (type pdf)
+ <use sin4.pdf>
+<sin5.pdf, id=5, 578.16pt x 433.62pt>
+File: sin5.pdf Graphic file (type pdf)
+ <use sin5.pdf>
+<sin6.pdf, id=6, 578.16pt x 433.62pt>
+File: sin6.pdf Graphic file (type pdf)
+ <use sin6.pdf>
+Overfull \hbox (10.78752pt too wide) in paragraph at lines 8--19
+[][] []
+ []
+
+
+Overfull \hbox (10.78752pt too wide) in paragraph at lines 8--19
+[] []
+ []
+
+
+Overfull \hbox (10.78752pt too wide) in paragraph at lines 8--19
+[] [] 
+ []
+
+[1{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./sin1.pdf> <./sin2.pdf>
+ <./sin3.pdf> <./sin4.pdf> <./sin5.pdf> <./sin6.pdf>] (./sins.aux) ) 
+Here is how much of TeX's memory you used:
+ 1057 strings out of 95086
+ 13173 string characters out of 1183254
+ 59124 words of memory out of 1500000
+ 4271 multiletter control sequences out of 10000+50000
+ 5463 words of font info for 20 fonts, out of 1200000 for 2000
+ 28 hyphenation exceptions out of 8191
+ 25i,7n,24p,199b,229s stack positions out of 5000i,500n,6000p,200000b,5000s
+</usr/share
+/texmf-texlive/fonts/type1/bluesky/cm/cmmi8.pfb></usr/share/texmf-texlive/fonts
+/type1/bluesky/cm/cmr10.pfb></usr/share/texmf-texlive/fonts/type1/bluesky/cm/cm
+r8.pfb>
+Output written on sins.pdf (1 page, 93965 bytes).
+PDF statistics:
+ 204 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 131072)
+ 31 words of extra memory for PDF output out of 10000 (max. 10000000)
+
