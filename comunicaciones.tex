@@ -100,16 +100,166 @@ gp.write("plot sin(x)\n")
 gp.close()
 \end{python}
 
+Una manera fácil de hacer una animación es utilizar la terminal de GIF animado en \inl{gnuplot}. Para utilizar esta terminal, es necesario contar con una versión de \inl{gnuplot} compilada de manera adecuada, con la librería \inl{gd}.
+
+En la terminal de GIF animado, cada vez que uno ejecuta un \inl{plot}, otro cuadro se agrega a la animación. Por ejemplo:
+\begin{python}
+from os import popen
+from numpy import arange
+gp = popen("gnuplot", "w")
+gp.write("set term gif anim\n")
+gp.write("set out 'sin.gif'\n")	# archivo de salida de gnuplot
+
+for a in arange(0., 10., 0.1):
+  gp.write("plot sin(x + %g)\n title 'sin(x+%g)'\n" % (a, a) )
+gp.write("set out\n")	# cerrar el archivo de salida de gnuplot
+gp.close()
+\end{python}
+
 
 \section{Ejemplos}
 
-\begin{itemize}
- \item 
-Cartas de aceptación en \LaTeX
+Veamos algunos ejemplos de lo que podemos hacer utilizando Python para controlar otros programas. 
+La sustitución de variables juega un papel crucial.
 
-\item 
-GIF animado con gnuplot
+\subsection{Generando archivos sencillos con \LaTeX}
+Empecemos con una aplicación sencilla, en la cual utilizamos Python para crear un archivo de \LaTeX\ para una carta de aceptación de un congreso, para la cual necesitamos el nombre del autor y el título del cartel.
 
-\item 
-Figuras para distintos parámetros
-\end{itemize}
+Primero, para generar un archivo de \LaTeX, necesitamos poder manejar ciertos caracteres especiales en las cadenas. Para hacerlo, podemos poner \inl{r} al principio de la cadena para formar una cadena ``raw'' (``crudo''); Python automáticamente la convertirá en una cadena normal:
+\begin{python}
+s = r"\begin{document}"       
+s
+print s
+\end{python}
+Además, Python nos permite declarar cadenas con varias líneas, al utilizar tres comillas. Así que un archivo de \LaTeX\ sencillo se puede crear con
+\begin{python}
+codigo_latex = r"""
+\documentclass{article}
+\usepackage{mathptmx}	% fuente Times
+\begin{document}
+<Hola, David!
+\end{document}
+"""
+\end{python}
+Ahora tenemos que guardar eso en un archivo, y compilarlo
+\begin{python}
+from os import system
+
+archivo = open("temp.tex", "w")
+archivo.write(codigo_latex)	# escribir contenido de variable en archivo
+archivo.close()
+
+comando = "pdflatex temp.tex"	# comando para compilar el archivo .tex
+system(comando)	# ejecutar el comando
+
+comando = "acroread temp.pdf"
+system(comando)	# ver el archivo que creamos
+\end{python}
+
+Ahora está fácil reemplazar el nombre con el contenido de una variable, por ejemplo una que leemos de la línea de comandos, con el siguiente código que guardamos como \inl{saludo.py}:
+\begin{python}
+from sys import argv, exit
+
+try:
+  nombre = argv[1]
+except:
+  print "Sintaxis: python saludo.py nombre"
+  exit(1)
+
+codigo_latex = r"""
+\documentclass{article}
+\usepackage{mathptmx}	% fuente Times
+\begin{document}
+<Hola, %s!
+\end{document}
+""" % nombre
+\end{python}
+Lo guardamos y compilamos como antes. Nótese que la sustitución de variables también se puede utilizar con las cadenas crudas y las con múltiples líneas.
+
+Incluso podríamos leer el código \LaTeX\ desde un archivo. En el archivo ponemos \inl{%s} etc.\ donde queremos sustituir variables. Leemos el contenido del archivo en una cadena, que entonces contendrá explícitamente los \inl{%s}, y \emph{luego} hacemos la sustitución. Así, si temp.tex contiene 
+\begin{python}
+\documentclass{article}
+\usepackage{mathptmx}	% fuente Times
+\begin{document}
+<Hola, %s!
+\end{document}
+\end{python}
+podemos hacer
+\begin{python}
+entrada = open("temp.tex", "r")
+codigo_latex = entrada.read()	# leer todo el contenido en una cadena
+nombre = "David"
+codigo_latex = codigo_latex % nombre
+\end{python}
+En la última línea, reemplazamos el contenido de \inl{codigo_latex} con el resultado de hacer la sustitución de variables.
+
+\subsection{Gráficas del comportamiento de un sistema para distintos valores de un parámetro}
+Ahora veamos un ejemplo más complicado, también ocupando \LaTeX, donde crearemos un archivo con varias figuras que retratan el comportamiento de un sistema con distintos valores de un parámetro. Esta idea se tomó del excelente libro de Langtangen. Ahí se dan varias variaciones sobre el tema, incluyendo cómo generar un reporte en HTML.
+
+Lo primero que hay que hacer es generar las figuras. Esto se puede hacer por ejemplo con \inl{gnuplot}, pero aquí emplearemos \inl{pylab}. Para enfatizar la idea, nuestro ``sistema'' será una gráfica de $\sin(kx)$ para distintos $k$, pero basta con reemplazar la gráfica con datos reales.
+Primero generemos una gráfica:
+\begin{python}
+from pylab import *
+
+t = arange(-2*pi, 2*pi, 0.1)
+plot(t, sin(t), '-o')
+savefig("sin.pdf")
+\end{python}
+
+Ahora repitamos eso para generar varias figuras:
+\begin{python}
+from pylab import *
+
+t = arange(-2*pi, 2*pi, 0.1)
+
+for k in range(1, 7):
+  plot(t, sin(k*t), '-o')
+  xlabel("$x$")
+  ylabel("$sin(%dx)$" % k)
+  savefig("sin%d.pdf" % k)
+\end{python}
+Nótese el uso directo de la sustitución de variables para generar la cadena correspondiente al nombre del archivo \emph{al momento de utilizarla}. Acordémonos que \inl{pylab} puede ocupar directamente etiquetas hechas con \LaTeX.
+
+Ahora agarremos estas figuras y pongámoslas en un solo PDF, a través de \LaTeX.
+Para hacerlo, primero generemos el principio del archivo:
+\begin{python}
+latex = r"""
+\documentclass{article}
+\usepackage{graphicx}	% para incluir figuras
+\begin{document}
+\begin{figure}
+"""
+\end{python}
+
+Ahora para cada figura, tenemos que agregar el comando de \LaTeX\ para importarla:
+\begin{python}
+for k in range(1, 7):
+  latex += r"\includegraphics[scale=0.4]{sin%d}" % k + "\n"
+\end{python}
+Nótese que es necesario separar el \inl{\n} para que no aparezca adentro de la cadena cruda.
+Finalmente hay que terminar la figura:
+\begin{python}
+latex += "\end{figure}"
+\end{python}
+Podemos checar que todo pasó bien con
+\begin{python}
+print latex
+\end{python}
+
+
+Una mejor manera de incluir las figuras es utilizando el paquete \inl{subfigure} de \LaTeX, que provee una manera bonita de incluir subfiguras. Después de incluirlo con \verb+\usepackage{subfigure}+, podemos utilizarlo adentro de entorno \inl{figure} como sigue: \verb+\subfigure[subpie]{\includegraphics{subfigura}}+, donde \inl{subpie} es el pie de figura para la subfigura, y \inl{subfigura} el archivo. Así que podemos poner:
+\begin{python}
+subfigura = r"""
+\subfigure[$k=%d$] {
+\includegraphics[scale=0.4]{sin%d}
+}
+"""	# cada figura se ve así
+
+# Ahora incluir cada figura:
+for k in range(1, 7):
+  latex += subfigura % (k, k)
+\end{python}
+
+
+
+
