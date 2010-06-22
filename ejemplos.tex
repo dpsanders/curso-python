@@ -43,6 +43,35 @@ def integrar(t0, tf, h, x0, f):
   return lista_t, lista_x
 \end{python}
 
+Para integrar la ecuación $\dot{x} = -x$ ponemos entonces
+\begin{python}
+def f(x):
+  return x
+
+t, x = integrar(0, 10, 0.1, 10, f)
+\end{python}
+
+Nótese que el \emph{mismo código} funciona para ecuaciones vectoriales $\dot{\x} = \f(\x)$, siempre y cuando la función \inl{f} acepte un vector y regresa un vector.
+
+Si tenemos varios métodos, entonces cambiamos la definición de \inl{integrar} a
+\begin{python}
+def integrar(t0, tf, h, x0, f, metodo):
+\end{python}
+y la línea que hace el trabajo a
+\begin{python}
+x = metodo(t, x, h, f)
+\end{python}
+
+Ahora para integrar con respecto a distintos métodos, podemos hacer
+\begin{python}
+metodos = [euler, rk2, rk4]
+
+for metodo in metodos:
+  t, x = integrar(0, 10, 0.1, 10, f, metodo)
+\end{python}
+
+
+
 
 
 

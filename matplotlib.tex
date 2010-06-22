@@ -313,13 +313,13 @@ Lo mismo tiene para el teclado. Así que el código más sencillo es el siguient
 from pylab import *
 
 def teclado(event):
-  print "Se tecleó %s en la posicion (%g, %g)" % event.key, event.xdata, event.ydata
+  print "Se tecleo %s en la posicion (%g, %g)" % event.key, event.xdata, event.ydata
 
 def mouse(event):	
   if event.button != 1: 
     return
   x,y = event.xdata, event.ydata
-  print "Se oprimió el botón izquierdo en (%g, %g)" % (x, y)
+  print "Se oprimio el boton izquierdo en (%g, %g)" % (x, y)
 
 x = arange(10)
 y = x*x

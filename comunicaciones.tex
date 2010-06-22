@@ -1,0 +1,115 @@
+\chapter{Comunicándose con otros programas}
+
+En este capítulo, veremos cómo un programa de Python puede interactuar con otros programas.
+
+\section{Redirección}
+
+En esta sección veremos algunas técnicas útiles del shell \inl{bash} que no están restringidos a \inl{python}.
+
+Ya hemos visto que la manera más fácil de guardar información en un archivo es con la redirección de la salida estándar del programa: corriendo desde la terminal, ponemos
+\begin{python}
+python prog.py > salida.dat
+\end{python}
+y así creamos un archivo \inl{salida.dat}, donde se capta la información que anteriormente se mandaba a la terminal.
+
+Lo mismo se puede hacer con la entrada estándar: si tenemos un programa que lee información que teclea el usuario:
+\begin{python}
+a = raw_input("Dame a: ")
+b = raw_input("Dame b: ")
+\end{python}
+Entonces podemos también mandarle valores de un archivo, al redirigir la entrada estándar:
+\begin{python}
+python prog.py < datos.dat
+\end{python}
+donde \inl{datos.dat} contiene la información deseada.  A su vez, la salida de este programa se puede mandar a otro archivo con \inl{>}.
+
+Finalmente, si queremos conectar la salida de un programa con la entrada de otro, utilizamos un ``tubo'' (``pipe''):
+\begin{python}
+python prog1.py | python prog2.py
+\end{python}
+Eso es equivalente a hacer
+\begin{python}
+python prog1.py > temp.dat
+python prog2.py < temp.dat
+\end{python}
+pero sin la necesidad de crear el archivo temporal. 
+
+Los pipes son muy útiles en unix, y se pueden encadenar.
+
+
+
+
+\section{Argumentos de la línea de comandos}
+
+Una manera más flexible y más útil para mandar información a un programa es a través de argumentos que se ponen en la mera línea de comandos. A menudo queremos
+mandar a un programa los valores de un parámetro, para después poder hacer barridos del mismo.
+
+Para hacerlo, Python provee una variable llamada \inl{argv}, que viene definida en el módulo \inl{sys}. Podemos ver qué es lo que contiene esta variable al correr un programa sencillo:
+\begin{python}
+from sys import argv
+
+print "Argumentos: argv"
+\end{python}
+Si ahora llamamos a nuestro programa con
+\begin{python}
+python prog.py 10 0.5 ising
+\end{python}
+entonces vemos que \inl{argv} es una lista de cadenas, cada una representando uno de los argumentos, empezando por el nombre del script.
+Por lo tanto, podemos extraer la información deseada con las herramientas normales de Python, por ejemplo
+\begin{python}
+from sys import argv
+T, h = map(float, argv[1:3])
+modelo = argv[3]
+\end{python}
+
+Sin embargo, si no damos suficientes argumentos, entonces el programa fracasará. Podemos atrapar una \defn{excepción} de este tipo con un bloque \inl{try}\ldots\inl{except}:
+\begin{python}
+from sys import argv, exit
+try:
+  T, h = map(float, argv[1:3])
+  modelo = argv[3]
+except:
+  print "Sintaxis: python prog.py T h modelo"
+  exit(1)
+\end{python}
+Es útil proveerle al usuario información acerca de la razón por la cual fracasó el programa. Aquí hemos utilizado la función \inl{exit} que viene también en el módulo \inl{sys}, para que salga del programa al encontrar un problema, pero eso no es obligatorio --podría poner valores por defecto de los parámetros en este caso, por ejemplo.
+
+
+\section{Llamando a otros programas}
+
+El módulo \inl{os} provee unas herramientas para mandar llamar a otros programas ``hijos'' desde un programa ``padre''\footnote{Hoy en día, se recomienda más bien el paquete \inl{subprocess} para esta funcionalidad, pero es más complicado.}.
+
+La función más útil es \inl{system}, que permite correr un comando a través de un nuevo \inl{bash}; podemos enviar cualquier comando que funciona en \inl{bash}, en particular podemos correr otros programas. La función acepta una cadena:
+\begin{python}
+from os import system
+system("ls")
+\end{python}
+
+Ahora podemos empezar a hacer cosas interesantes al construir los comandos con la sustitución de variables. Por ejemplo, si tenemos un programa \inl{prog.py} que acepta un argumento de la línea de comandos, podemos correrlo de manera consecutiva con distintos valores del parámetro con
+\begin{python}
+for T in range(10):
+  comando = "python prog.py %g" % T
+  system(comando)
+\end{python}
+
+Si queremos abrir un programa que se conectará al nuestro y recibirá comandos, utilizamos \inl{popen} para abrir un \emph{pipe}:
+\begin{python}
+from os import popen
+gp = popen("gnuplot -persist", "w")
+gp.write("plot sin(x)\n")
+gp.close()
+\end{python}
+
+
+\section{Ejemplos}
+
+\begin{itemize}
+ \item 
+Cartas de aceptación en \LaTeX
+
+\item 
+GIF animado con gnuplot
+
+\item 
+Figuras para distintos parámetros
+\end{itemize}

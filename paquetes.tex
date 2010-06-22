@@ -1,0 +1,144 @@
+\chapter{Paquetes para el cómputo científico en Python}
+
+Este capítulo propone dar un breve resumen de algunos de los muchos paquetes disponibles para llevar a cabo distintas tareas de cómputo científico en Python.
+
+\section{Cálculos numéricos con \texttt{scipy}}
+El paquete \inl{scipy} provee una colección de herramientas para llevar a cabo tareas numéricas, como son los siguientes submódulos:
+funciones especiales (\inl{special}); integración de funciones  y de ecuaciones diferenciales ordinarias (\inl{integrate}), optimización y raíces de funciones (\inl{optimize}), álgebra lineal (\inl{linalg}), incluyendo para matrices escasas (\inl{sparse}), y estadísticas (\inl{stats}).
+
+Veamos algunos ejemplos. Para utilizar las funciones especiales, hacemos
+\begin{python}
+from scipy import special
+for i in range(5):
+
+
+special.gamma(3)
+special.gamma(3.5)
+
+x = arange(-2, 2, 0.05)
+
+for i in range(5):
+  plot(x, map(special.hermite(i), x))
+\end{python}
+
+Para integrar la ecuación de Airy (un ejemplo de la documentación de \inl{scipy})
+\begin{equation}
+\frac{d^2 w}{d z^2} - z w(z) = 0,
+\end{equation}
+podemos poner
+\begin{python}
+from scipy.integrate import odeint
+from scipy.special import gamma, airy
+y1_0 = 1.0/3**(2.0/3.0)/gamma(2.0/3.0)
+y0_0 = -1.0/3**(1.0/3.0)/gamma(1.0/3.0)
+y0 = [y0_0, y1_0]
+
+def func(y, t):
+  return [t*y[1],y[0]]
+
+def gradiente(y,t):
+  return [[0,t],[1,0]]
+
+x = arange(0,4.0, 0.01)
+t = x
+ychk = airy(x)[0]
+y = odeint(func, y0, t)
+y2 = odeint(func, y0, t, Dfun=gradient)
+
+print ychk[:36:6]
+print y[:36:6,1]
+print y2[:36:6,1]
+\end{python}
+En la segunda llamada a \inl{odeint}, mandamos explícitamente la función que calcula la derivada (gradiente) de \inl{f}; en la primera llamada, no fue necesario contar con una función que calculara eso.
+
+Encontrar raíces de funciones es más o menos sencillo:
+\begin{python}
+def f(x):
+  return x + 2*cos(x)
+
+def g(x):
+  out = [x[0]*cos(x[1]) - 4]	
+  out.append(x[1]*x[0] - x[1] - 5)
+  return out
+
+from scipy.optimize import fsolve
+x0 = fsolve(func, 0.3)
+x02 = fsolve(func2, [1, 1])
+\end{python}
+
+
+\section{Cálculos simbólicos con \texttt{sympy}}
+El módulo \inl{sympy} provee una colección de rutinas para hacer cálculos simbólicos.
+Las variables se tienen que declarar como tal, y luego se pueden utilizar en expresiones simbólicas:
+\begin{python}
+from sympy import *
+x, y, z = symbols('xyz')
+k, m, n = symbols('kmn', integer=True)
+f = Function("f")
+
+x + x
+(x + y) ** 2
+z = _
+z.expand()
+
+z.subs(x, 1)
+
+limit(sin(x) / x, x, 0)
+limit(1 - 1/x, x, oo)
+
+diff(sin(2*x), x)
+diff(sin(2*x), x, 3)
+
+cos(x).series(x, 0, 10)
+
+integrate(log(x), x)
+integrate(sin(x), (x, 0, pi/2))
+
+f(x).diff(x, x) + f(x)
+dsolve(f(x).diff(x, x) + f(x), f(x))
+
+solve(x**4 - 1, x)
+
+pi.evalf(50)
+\end{python}
+
+
+\section{\texttt{mayavi2}}
+
+ El paquete \inl{mayavi2} provee una manera de visualizar conjuntos de datos complejos en 3D. Para utilizarlo de manera interactiva, comenzamos con
+\begin{python}
+ipython -wthread
+
+import numpy as np
+
+def V(x, y, z):
+    """ A 3D sinusoidal lattice with a parabolic confinement. """
+    return np.cos(10*x) + np.cos(10*y) + np.cos(10*z) + 2*(x**2 + y**2 + z**2)
+
+X, Y, Z = np.mgrid[-2:2:100j, -2:2:100j, -2:2:100j]
+V(X, Y, Z)
+
+from numpy import *
+from enthought.mayavi import mlab
+
+x, y, z = random.rand(3, 10)
+mlab.points3d(x, y, z)
+c = random.rand(10)
+mlab.points3d(x, y, z, color=c)
+
+mlab.clf()
+
+mlab.contour3d(X, Y, Z, V)
+
+
+\end{python}
+
+
+\section{Entorno completo: \texttt{sage}}
+El paquete \inl{sage}, disponible libremente de la página \url{http://www.sagemath.org}, pretende proveer una manera de reemplazar a programas del estilo de Mathematica, al proveer un entorno completo para hacer cálculos matemáticos. Es un entorno que provee un interfaz tipo Python a muchos paquetes libres para hacer matemáticas.  Además, provee un interfaz disponible por el internet para interactuar con los ``notebooks''.
+
+
+
+
+
+

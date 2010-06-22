@@ -1,0 +1,143 @@
+\chapter{Programación orientada a objetos: clases}
+
+En este capítulo, veremos uno de los temas más revolucionarios en materia de programación: la \defn{programación orientada a objetos}. Aunque hemos estado utilizando los objetos de manera implícita a través del curso, ahora veremos cómo nosotros podemos definir nuestros propios tipos de objetos nuevos, y para qué sirve.
+
+\section{La programación orientada a objetos: las clases}
+
+Consideremos una situación clásica en el cómputo científico: un sistema que consiste en cierto número de partículas en 2 dimensiones, que tienen \defn{propiedades internas}, como una posición, una velocidad y una masa, y que se pueden mover con una regla tipo Euler.
+
+Para una partícula, podríamos definir sus variables simplemente como sigue:
+\begin{python}
+x = y = 0.0    # posicion
+vx =  vy = 1.0  # velocidad
+\end{python}
+Un paso de Euler de tamaño \inl{dt} se puede implementar con
+\begin{python}
+dt = 0.1
+x += dt * vx;
+y += dt * vy;
+\end{python}
+
+
+Pero ahora, >qué hacemos si necesitamos otra partícula más? Podríamos poner
+\begin{python}
+x1 = y1 = 0.0
+x2 = y2 = 0.0
+vx1 = vy1 = 1.0
+vx1 = vy1 = 1.0
+\end{python}
+Si las partículas también tienen masas y colores, entonces se vuelve muy tedioso, ya que tenemos que actualizar todo dos veces para cada propiedad nueva:
+\begin{lstlisting}
+m1 = m2 = 0.0;
+c1 = c2 = 0.0;
+\end{lstlisting}
+Para muchas particulas podríamos emplear arreglos (listas, en Python), que reduciría el trabajo.
+
+Pero ahora podríamos imaginarnos que por alguna razón queremos  agregar otra partícula, o incluso duplicar toda la simulación.
+  Entonces tendríamos que duplicar a mano todas las variables, cambiando a la vez sus nombres, lo cual
+seguramente conducirá a introducir  errores.
+
+Sin embargo, \emph{conceptualmente} tenemos muchas variables que están relacionadas: todas \emph{pertenecen} a una partícula.
+Hasta ahora, no hay manera de expresar esto en el programa.
+
+\section{La solución: objetos, a través de clases}
+
+Lo que queremos hacer, entonces, es reunir todo lo que corresponde a una partícula en un \emph{nuevo tipo de objeto}, llamado \inl{Particula}.  Luego podremos decir que  \inl{p1} y \inl{p2} son \inl{Particula}s, 
+o incluso hacer un arreglo (lista) de \inl{Particula}s.
+
+Toda la información que le corresponde a una partícula dada estará contenida adentro del objeto; esta información formará parte del objeto no sólo
+conceptualmente, sino también en la representación en el programa. 
+
+Podemos pensar en un objeto, entonces, como un tipo de ``caja negra'', que tiene propiedades internas, y que puede interactuar de alguna manera con el mundo externo. No es necesario saber o entender qué es lo que hay adentro del objeto para entender cómo funciona. Se puede pensar que corresponde a una caja con palancas, botones y luces: las palancas y los botones proveen una manera de darle información o instrucciones a la caja, y las luces dan información de regreso al mundo externo.
+
+Para implementar eso en Python, se declara una \defn{clase} llamada \inl{Particula} y se crea una \defn{instancia} de esta clase, llamada \inl{p}.
+\begin{python}
+class Particula:
+  x = 0.0
+  
+p = Particula()
+p.x
+\end{python}
+Nótese que \inl{p} tiene \emph{adentro} una propiedad, que se llama \inl{x}. Podemos interpretar \inl{p.x} como una \inl{x} que le \emph{pertenece} a  \inl{p}.
+
+Si ahora hacemos
+\begin{lstlisting}
+p2 = Particula()
+p2.x
+\end{lstlisting}
+entonces tenemos una variable completamente \emph{distinta} que también se llama \inl{x}, pero que ahora le pertenece a  \inl{p2}, que es otro objeto de tipo  \inl{Particula}. De hecho, más bien podemos pensar que \inl{p2.x} es una manera de escribir \inl{p2_x}, que es como lo hubiéramos podido escribir antes, que tiene la bondad de que ahora tambíen tiene sentido pensar en el conjunto \inl{p} como un todo.
+
+Remarquemos que ya estamos acostumbrados a pensar en cajas de este tipo en matemáticas, al tratar con vectores, matrices, funciones, etc.
+
+\section{Métodos de clases}
+
+Hasta ahora, una clase actúa simplemente como una caja que contiene datos.  
+Pero objetos no sólo tienen información, sino también pueden \emph{hacer cosas}.
+Para hacerlo, también se pueden definir \emph{funciones} --llamadas \defn{métodos}-- que le pertenecen al objeto.  
+Simplemente se definen las funciones adentro de la declaración de la clase:
+\begin{python}
+class Particula:
+  x = 0.0
+  v = 1.0
+  
+  def mover(self, dt):
+    self.x += self.v*dt
+
+p = Particula()
+print p.x
+p.mover(0.1)
+print p.x
+\end{python}
+
+Nótese que los métodos de las clases siempre llevan un argumento extra, llamado \inl{self}, que quiere decir ``sí mismo''.
+Las variables que  pertenecen a la clase, y que se utilizan adentro de estas funciones, llevan \inl{self.}, para indicar que son variables que forman parte de la clase, y no variables globales. Podemos pensar en las variables internas a la clase como variables ``pseudo-globales'', ya que están accesibles desde cualquier lugar \emph{adentro} de la clase.
+
+
+\section{Funciones inicializadoras}
+Cuando creamos una instancia de un objeto, muchas veces queremos \defn{inicializar} el objeto al mismo tiempo, es decir pasarle información sobre su estado inicial. En Python, esto se hace a través de una función inicializadora, como sigue:
+\begin{python}
+class Particula:
+  def __init__(self, xx=0.0, vv=1.0):
+    self.x = xx
+    self.v = vv
+  
+  def mover(self, dt):
+    self.x += self.v*dt
+
+p1 = Particula()
+print p1.x
+p2 = Particula(2.5, 3.7)
+print p2.x
+p1.mover(0.1)
+p2.mover(0.1)
+print p1.x, p2.x
+\end{python}
+Nótese que la función inicializadora debe llamarse \inl{__init__}, con dos guiones bajos de cada lado del nombre \inl{init}.
+Puede tomar argumentos que se utilizan para inicializar las variables de la clase.
+
+\section{Métodos internos de las clases}
+Las clases pueden ocupar varios métodos para proveer un interfaz más limpio para el usuario. Por ejemplo, al poner 
+\inl{print p1} en el último ejemplo, sale algo así como
+\begin{python}
+<__main__.Particula instance at 0x2849cb0>
+\end{python}
+Podemos hacer que salga algo más útil al proveer adentro de la clase una función \inl{__str__}:
+\begin{python}
+class Particula:
+  def __init__(self, xx=0.0, vv=1.0):
+    self.x = xx
+    self.v = vv
+
+  def __str__(self):
+    return "Particula(%g, %g)" % (self.x, self.v)
+
+p1 = Particula()
+print p1
+\end{python}
+
+También podemos definir funciones que permiten que podamos llevar a cabo operaciones aritméticas etc.\ con objetos de este tipo, es decir, podemos \defn{sobrecargar} los operadores para que funcionen con nuestro nuevo tipo. Eso es lo que pasa con los \inl{array} de \inl{numpy}, por ejemplo.
+
+\ej Haz un objeto para representar a una partícula en 2D. Haz una nube de tales partículas.
+
+\section{Herencia}
+Las clases también pueden formar jerarquías al utilizar la \defn{herencia}, que quiere decir que una clase es un ``tipo de'', o ``subtipo de'' otro.
